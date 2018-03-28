@@ -1,9 +1,25 @@
 h1 = @question.title
 h3 = @question.body
+br
 
-ul
+h2 Answers
+
+-if @question.answers.any?
   -@question.answers.each do |answer|
-    li = answer.body
+    - if answer.persisted?
+      p
+        = answer.body
+        -if user_signed_in? && current_user.author?(answer)
+          = link_to 'Delete answer', answer_path(answer), method: :delete
+
+  -if user_signed_in?
+    p Give your answer
+
+    =render 'answers/form', question: @question
+
+    -if user_signed_in? && current_user.author?(@question)
+      p = link_to 'Delete question',  question_path(@question),
+              method: :delete
 
 p = link_to 'Back', root_path
 p = link_to 'Ask question', new_question_path
