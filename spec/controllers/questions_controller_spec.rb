@@ -50,6 +50,11 @@ describe QuestionsController do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
+      it 'checks if created question belongs to user' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).user_id).to eq @user.id
+      end
+
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns :question)
@@ -77,5 +82,36 @@ describe QuestionsController do
         expect(response).to render_template :new
       end
     end
+  end
+
+  describe 'DELETE #destroy' do
+
+    before{ sign_in question.user }
+
+    context 'Author deletes his question' do
+      it 'deletes question from database' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to root' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'Non-author tries to delete a question' do
+      let!(:another_user) { create(:user) }
+      let!(:another_question) { create(:question, user: another_user) }
+
+      it 'doesn`t delete question from database' do
+        expect { delete :destroy, params: { id: another_question } }.to_not change(Question, :count)
+      end
+
+      it 'renders question view' do
+        delete :destroy, params: { id: another_question }
+        expect(response).to render_template :show
+      end
+    end
+
   end
 end
