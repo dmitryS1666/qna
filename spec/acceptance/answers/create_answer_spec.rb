@@ -19,7 +19,6 @@ feature 'Create answer', %q{
 
     expect(page).to have_content 'Your answer was successfully created'
     expect(page).to have_content question.answers.last.body
-    expect(current_path).to eq question_path(question)
   end
 
   scenario 'Authenticated user tries to create answer with invalid attributes' do
