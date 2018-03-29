@@ -50,11 +50,6 @@ describe QuestionsController do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
-      it 'checks if created question belongs to user' do
-        post :create, params: { question: attributes_for(:question) }
-        expect(assigns(:question).user_id).to eq @user.id
-      end
-
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns :question)
@@ -63,7 +58,7 @@ describe QuestionsController do
 
     context 'with invalid nil attributes' do
       it 'doesn`t save question to database with nil attributes' do
-        expect { post :create, params: { question: attributes_for(:nil_attributes)} }.to_not change(@user.questions, :count)
+        expect { post :create, params: { question: attributes_for(:nil_attributes)} }.to_not change(Question, :count)
       end
 
       it 'again renders new view' do
@@ -72,9 +67,9 @@ describe QuestionsController do
       end
     end
 
-    context 'with invalid length-less attributes' do
-      it 'doesn`t save question to database with length-less attributes' do
-        expect { post :create, params: { question: attributes_for(:length_less_attributes)} }.to_not change(@user.questions, :count)
+    context 'with wrong attributes' do
+      it 'doesn`t save question to database with wrong attributes' do
+        expect { post :create, params: { question: attributes_for(:wrong_attributes)} }.to_not change(@user.questions, :count)
       end
 
       it 'again renders new view' do

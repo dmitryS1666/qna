@@ -20,4 +20,10 @@ FactoryBot.define do
     body 'str'
     user
   end
+
+  factory :wrong_attributes, class: 'Question' do
+    title '1-2'
+    body ''
+    user
+  end
 end
