@@ -1,39 +1,27 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller do
+describe QuestionsController do
+  let(:question) { create(:question) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
-    before do
-      get :index
-    end
+    before { get :index}
 
-    it 'populates an array of all questions' do
+    it 'fullfils questions array' do
       expect(assigns(:questions)).to match_array(questions)
     end
 
-    it 'renders index view' do
+    it 'render index view' do
       expect(response).to render_template :index
     end
   end
 
-  describe 'GET #show' do
-    let(:question) { create(:question) }
-    before { get :show, params: { id: question } }
-
-    it 'assings the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
-  end
-
   describe 'GET #new' do
+    sign_in_user
+
     before { get :new }
 
-    it 'assings a new Question to @question' do
+    it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
@@ -42,28 +30,83 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    before { get :show, params: { id: question } }
+
+    it 'assigns requested question to @question' do
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'redirects to show view' do
+      expect(response).to render_template :show
+    end
+  end
+
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
-      it 'save the new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question)} }.to change(Question, :count).by(1)
+      it 'saves new question to database' do
+        expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to redirect_to question_path(assigns :question)
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+    context 'with invalid nil attributes' do
+      it 'doesn`t save question to database with nil attributes' do
+        expect { post :create, params: { question: attributes_for(:nil_attributes)} }.to_not change(Question, :count)
       end
 
-      it 're-renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
+      it 'again renders new view' do
+        post :create, params: { question: attributes_for(:nil_attributes)}
+        expect(response).to render_template :new
+      end
+    end
+
+    context 'with wrong attributes' do
+      it 'doesn`t save question to database with wrong attributes' do
+        expect { post :create, params: { question: attributes_for(:wrong_attributes)} }.to_not change(@user.questions, :count)
+      end
+
+      it 'again renders new view' do
+        post :create, params: { question: attributes_for(:nil_attributes)}
         expect(response).to render_template :new
       end
     end
   end
 
+  describe 'DELETE #destroy' do
+
+    before{ sign_in question.user }
+
+    context 'Author deletes his question' do
+      it 'deletes question from database' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to root' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'Non-author tries to delete a question' do
+      let!(:another_user) { create(:user) }
+      let!(:another_question) { create(:question, user: another_user) }
+
+      it 'doesn`t delete question from database' do
+        expect { delete :destroy, params: { id: another_question } }.to_not change(Question, :count)
+      end
+
+      it 'renders question view' do
+        delete :destroy, params: { id: another_question }
+        expect(response).to render_template :show
+      end
+    end
+
+  end
 end
