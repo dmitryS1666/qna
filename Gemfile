@@ -17,23 +17,23 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'rubocop', '~> 0.47.1', require: false
 gem 'slim-rails'
+gem 'rails-controller-testing'
 gem 'devise'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'geckodriver-helper'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'selenium-webdriver'
   gem 'rspec-rails'
   gem 'factory_bot_rails'
-  gem 'rails-controller-testing'
+  gem 'capybara-webkit', '1.13.0'
 end
 
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -41,8 +41,6 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'database_cleaner'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
