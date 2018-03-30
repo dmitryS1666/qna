@@ -1,6 +1,7 @@
-= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+=form_with model: [question, question.answers.build], remote: true do |f|
+  = render 'shared/errors', resource: @answer
 
-= form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
   = f.label :body
-  = f.text_area :body, id: "body-answer-#{answer.id}"
-  = f.submit 'Save'
+  = f.text_area :body
+  br
+  = f.submit 'Add answer'

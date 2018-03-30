@@ -28,7 +28,7 @@ describe AnswersController do
     context 'with invalid attributes' do
       it 'doesn`t save answer to database' do
         expect { post :create, params: { answer: attributes_for(:invalid_answer),
-                                         question_id: question, format: :js } }.to_not change(Answer, :count)
+                                         question_id: question, format: :js } }.to_not change(question.answers, :count)
       end
 
       it 'renders create template' do
@@ -44,12 +44,12 @@ describe AnswersController do
 
     context 'Author deletes his answer' do
       it 'deletes answer from database' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer, format: :js } }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects question show' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(answer.question)
+      it 'renders destroy template' do
+        delete :destroy, params: { id: answer, format: :js }
+        expect(response).to render_template :destroy
       end
     end
 
@@ -58,12 +58,12 @@ describe AnswersController do
       let!(:another_answer) { create(:answer, user: another_user, question: question) }
 
       it 'doesn`t delete question from database' do
-        expect { delete :destroy, params: { id: another_answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: another_answer, format: :js } }.to_not change(Answer, :count)
       end
 
-      it 'renders question view' do
-        delete :destroy, params: { id: another_answer }
-        expect(response).to render_template :show
+      it 'renders destroy template' do
+        delete :destroy, params: { id: another_answer, format: :js }
+        expect(response).to render_template :destroy
       end
     end
 
@@ -99,7 +99,7 @@ describe AnswersController do
     end
 
     context 'Non-author tries to edit answer' do
-      it 'updates answer' do
+      it 'doesn`t update answer' do
         patch :update, params: { id: another_answer, answer: {body: '1111'}, format: :js }
         answer.reload
         expect(answer.body).to_not eq '1111'
@@ -111,6 +111,38 @@ describe AnswersController do
       end
     end
 
+  end
+
+  describe 'PATCH #make_best' do
+    before { sign_in question.user }
+    let!(:answer) { create(:answer, question: question) }
+
+    context 'Question`s author marks answer best' do
+      before { patch :make_best, params: { id: answer, format: :js } }
+
+      it 'makes answer best' do
+        expect(answer.reload).to be_best
+      end
+
+      it 'renders make_best template' do
+        expect(response).to render_template :make_best
+      end
+    end
+
+    context 'Not question author tries to mark answer best' do
+      sign_in_user
+
+      it 'doesn`t make answer best' do
+        patch :make_best, params: { id: answer, format: :js }
+        answer.reload
+        expect(answer).to_not be_best
+      end
+
+      it 'renders make_best template' do
+        patch :make_best, params: { id: answer, format: :js }
+        expect(response).to render_template :make_best
+      end
+    end
   end
 
 end

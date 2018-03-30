@@ -30,6 +30,14 @@ describe User do
       end
     end
 
+    context 'answer' do
+      it 'returns true if user is an author' do
+        expect(user).to be_author(answer)
+      end
+
+      it 'returns false if user is not an author' do
+        expect(user).to_not be_author(another_answer)
+      end
     end
   end
 end

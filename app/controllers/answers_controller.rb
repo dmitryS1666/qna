@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: :create
-  before_action :set_answer, only: [:destroy, :update]
+  before_action :set_answer, only: [:destroy, :update, :make_best]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -14,15 +14,11 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @question = @answer.question
+    @answer.destroy if current_user.author?(@answer)
+  end
 
-    if current_user.author?(@answer)
-      @answer.destroy
-      redirect_to @question, notice: 'Answer was successfully deleted.'
-    else
-      flash.now[:alert] = 'You have no permission.'
-      render 'questions/show'
-    end
+  def make_best
+    @answer.make_best! if current_user.author?(@answer.question)
   end
 
   private
