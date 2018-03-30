@@ -9,12 +9,9 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
+    = render 'shared/navigation'
+    
     p class='notice' = notice
     p class='alert' = alert
 
-    - if user_signed_in?
-      = render 'shared/logged_nav'
-    - else
-      = render 'shared/general_nav'
-
-      =yield
+    =yield
