@@ -8,7 +8,7 @@ feature 'Create question', %q{
 
   given!(:user) { create(:user) }
 
-  scenario 'Authenticated user creates question' do
+  scenario 'Authenticated user creates question with valid attributes' do
     sign_in(user)
 
     visit questions_path
@@ -22,13 +22,6 @@ feature 'Create question', %q{
     expect(page).to have_content user.questions.last.body
   end
 
-  scenario 'Non-authenticated user tries to create question' do
-    visit questions_path
-    click_on 'Ask question'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
-  end
-
   scenario 'Authenticated user creates question with invalid attributes' do
     sign_in(user)
 
@@ -39,6 +32,13 @@ feature 'Create question', %q{
     click_on 'Create'
 
     expect(page).to have_content "Title can't be blank"
+  end
+
+  scenario 'Non-authenticated user tries to create question' do
+    visit questions_path
+    click_on 'Ask question'
+
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 
 end 

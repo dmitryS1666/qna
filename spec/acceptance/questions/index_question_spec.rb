@@ -10,6 +10,7 @@ feature 'User can view all questions', %q{
   let!(:questions) { create_list(:question, 3) }
 
   scenario 'Logged user can view questions' do
+    questions = create_list(:question, 3)
     sign_in(user)
 
     visit questions_path
