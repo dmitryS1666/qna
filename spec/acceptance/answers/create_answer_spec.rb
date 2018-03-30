@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Create answer', %q{
   In order to contribute to community
@@ -37,6 +37,15 @@ feature 'Create answer', %q{
   scenario 'Non-authenticated user tries to create answer' do
     visit question_path(question)
     expect(page).to_not have_content 'Give your answer'
+  end
+
+  scenario 'User try to create invalid answer', js: true do
+    sign_in user
+    visit question_path(question)
+
+    click_on 'Create'
+
+    expect(page).to have_content "Body can't be blank"
   end
 
 end
