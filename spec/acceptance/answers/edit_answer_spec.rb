@@ -37,7 +37,6 @@ feature 'Answer editing', %q{
       end
     end
 
-
     scenario 'tries to edit other user`s answer' do
       within ".answer-#{another_answer.id}" do
         expect(page).to_not have_content 'Edit'
