@@ -1,4 +1,5 @@
 =form_with model: [@question, @answer], remote: true do |f|
+
   = render 'shared/errors', resource: @answer
 
   = f.label :body
@@ -8,5 +9,3 @@
   p Attachments:
   p
     = render 'attachments/form', f: f
-
-  = f.submit 'Add answer'
