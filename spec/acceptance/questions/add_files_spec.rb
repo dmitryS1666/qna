@@ -13,7 +13,7 @@ feature 'Adding files to question', %q{
     visit new_question_path
   end
 
-  scenario 'User adds file when asks question' do
+  scenario 'User adds file when asks question', js: true do
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: 'text text text'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"

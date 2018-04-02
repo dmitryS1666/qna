@@ -1,10 +1,18 @@
 - if answer.persisted?
+
   div id="answer_#{answer.id}"
 
     -if answer.best
       h3 Best answer
 
-      = answer.body
+    = answer.body
+    br
+
+    p Attachments:
+
+    ul
+    - answer.attachments.each do |a|
+      li= link_to a.file.identifier, a.file.url
     br
 
     -if current_user&.author?(answer)
@@ -15,3 +23,4 @@
 
     -if current_user&.author?(answer.question)
       = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
+  br
