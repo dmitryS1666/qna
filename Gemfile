@@ -21,6 +21,9 @@ gem 'rails-controller-testing'
 gem 'devise'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'carrierwave'
+gem 'remotipart'
+gem 'cocoon'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

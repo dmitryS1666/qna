@@ -1,10 +1,13 @@
 =form_for @question do |f|
   = render 'shared/errors', resource: @question
 
-  = f.label :title
-  = f.text_field :title
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
 
-  = f.label :body
-  = f.text_area :body
-
-  = f.submit 'Create'
+  p Attachments:
+  p
+    = render 'attachments/form', f: f
