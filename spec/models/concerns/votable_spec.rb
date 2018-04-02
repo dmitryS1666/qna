@@ -44,6 +44,12 @@ shared_examples_for 'votable' do
       resource.give_plus_vote(another_user)
       expect(resource.rating).to eq 2
     end
+
+    it 'returns difference of given votes' do
+      resource.give_minus_vote(user)
+      resource.give_minus_vote(another_user)
+      expect(resource.rating).to eq -2
+    end
   end
 
 end

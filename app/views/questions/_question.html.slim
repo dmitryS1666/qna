@@ -10,7 +10,7 @@ p.rating
     -unless current_user&.author?(@question)
     = render 'question_vote'
 
-  .question-errors
+  .errors
 br
 
 -if @question.attachments.any?

@@ -16,7 +16,7 @@
         -unless current_user&.author?(answer)
         = render 'answers/answer_vote', answer: answer
 
-    .answer-errors
+    .errors
     br
 
     -if answer.attachments.any?

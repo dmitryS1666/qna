@@ -19,7 +19,6 @@ feature 'Answer voting', %q{
 
       scenario 'plus vote', js: true do
         within "#answer_#{answer.id}" do
-          expect(page).to have_link 'Like'
           click_on 'Like'
           expect(find('.rating')).to have_content '1'
         end
@@ -43,6 +42,8 @@ feature 'Answer voting', %q{
     end
 
     context 'Not question`s author voted before' do
+      given!(:vote) { create(:vote) }
+
       before do
         sign_in user
         visit question_path(question)
