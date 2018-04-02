@@ -5,11 +5,11 @@ h2 Answers
 .answers
   = render @question.answers
 
--if user_signed_in?
-  p Give your answer
+  -if user_signed_in?
+    p Give your answer
 
-  .answer-errors
-  =render 'answers/form', question: @question
+    .answer-errors
+    =render 'answers/form', question: @question, answer: @answer
 
 p = link_to 'Back', root_path
 p = link_to 'Ask question', new_question_path
