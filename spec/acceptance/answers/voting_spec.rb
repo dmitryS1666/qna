@@ -42,7 +42,7 @@ feature 'Answer voting', %q{
     end
 
     context 'Not question`s author voted before' do
-      given!(:vote) { create(:vote) }
+      given!(:vote) { create(:vote, user: user, votable: answer) }
 
       before do
         sign_in user
@@ -50,8 +50,6 @@ feature 'Answer voting', %q{
       end
 
       scenario 'vote', js: true do
-        create(:vote, user: user, votable: answer)
-
         within "#answer_#{answer.id}" do
           expect(page).to have_link 'Like'
           click_on 'Like'
@@ -60,8 +58,6 @@ feature 'Answer voting', %q{
       end
 
       scenario 'cancel vote', js: true do
-        create(:vote, user: user, votable: answer)
-
         within "#answer_#{answer.id}" do
           expect(page).to have_link 'Cancel your vote'
           click_on 'Cancel your vote'
