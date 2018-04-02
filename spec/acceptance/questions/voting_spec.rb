@@ -12,8 +12,8 @@ feature 'Question voting', %q{
   describe 'Authenticated user' do
     context 'Not question`s author did not vote before' do
       before do
-        sign_in user
         visit question_path(question)
+        sign_in user
       end
 
       scenario 'plus vote', js: true do
