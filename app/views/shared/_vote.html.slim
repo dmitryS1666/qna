@@ -1,0 +1,8 @@
+p.vote_up.vote
+  = link_to 'Like', new_polymorphic_path(param, plus: true), method: :post, remote: true
+
+p.vote_down.vote
+  = link_to 'Dislike', new_polymorphic_path(param), method: :post, remote: true
+
+p.cancel_vote.vote
+  = link_to 'Cancel your vote', polymorphic_path(param), method: :delete, remote: true

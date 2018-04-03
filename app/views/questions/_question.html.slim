@@ -6,9 +6,8 @@ h3 Rating:
 p.rating
   = @question.rating
 
-  -if user_signed_in?
-    -unless current_user&.author?(@question)
-    = render 'question_vote'
+  -if user_signed_in? && !current_user&.author?(@question)
+    = render 'shared/vote', param: @question
 
   .errors
 br
@@ -18,6 +17,6 @@ br
   = render 'attachments/attachment', resource: @question
   br
 
-  -if current_user&.author?(@question)
+-if current_user&.author?(@question)
   = render 'questions/form_edit', question: @question
   p = link_to 'Delete question',  question_path(@question), method: :delete
