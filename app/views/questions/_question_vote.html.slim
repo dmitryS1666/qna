@@ -1,8 +1,8 @@
 p.vote_up.vote
-  = link_to 'Like', create_vote_question_path(@question, plus: true), method: :post, remote: true
+  = link_to 'Like', new_polymorphic_path(@question, plus: true), method: :post, remote: true
 
 p.vote_down.vote
-  = link_to 'Dislike', create_vote_question_path(@question), method: :post, remote: true
+  = link_to 'Dislike', new_polymorphic_path(@question), method: :post, remote: true
 
 p.cancel_vote.vote
-  = link_to 'Cancel your vote', delete_vote_question_path(@question), method: :delete, remote: true
+  = link_to 'Cancel your vote', polymorphic_path(@question), method: :delete, remote: true
