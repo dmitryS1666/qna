@@ -10,3 +10,17 @@ answerEdit = ->
     $('form#edit-answer-' + answer_id).show();
 
 $(document).on("turbolinks:load", answerEdit);
+
+
+$ ->
+  App.cable.subscriptions.create "AnswersChannel", {
+    connected: ->
+      @follow()
+
+    follow: ->
+      return unless gon.question_id
+      @perform 'follow', id: gon.question_id
+
+    received: (data) ->
+      appendAnswer(data)
+  }
