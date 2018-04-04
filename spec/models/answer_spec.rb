@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 describe Answer do
+  it_behaves_like 'votable'
+
   describe 'association' do
     it { should belong_to :question }
     it { should belong_to :user }
     it { should have_many(:attachments).dependent :destroy }
+    it { should have_many(:votes).dependent :destroy }
   end
 
   context 'validation' do

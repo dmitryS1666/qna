@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 describe Question do
+  it_behaves_like 'votable'
+
   describe 'association' do
     it { should have_many(:answers).dependent :destroy }
     it { should belong_to :user }
     it { should have_many(:attachments).dependent :destroy }
+    it { should have_many(:votes).dependent :destroy }
   end
 
   context 'validation' do
@@ -17,4 +20,5 @@ describe Question do
   describe 'attributes' do
     it { should accept_nested_attributes_for :attachments }
   end
+
 end

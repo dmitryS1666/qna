@@ -8,17 +8,27 @@
       = answer.body
     br
 
+    h3 Rating:
+    p.rating
+      = answer.rating
+
+      - if user_signed_in? && !current_user&.author?(answer)
+        = render 'shared/vote', resource: answer
+
+    .errors
+    br
+
     -if answer.attachments.any?
       p Attachments:
       = render 'attachments/attachment', resource: answer
       br
 
-      -if current_user&.author?(answer)
+    -if current_user&.author?(answer)
       = render 'answers/form_edit', answer: answer
       br
       = link_to 'Delete answer', answer, method: :delete, remote: true
       br
 
-      -if current_user&.author?(answer.question)
+    -if current_user&.author?(answer.question)
       = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
   br
