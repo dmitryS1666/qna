@@ -7,7 +7,7 @@ p.rating
   = @question.rating
 
   -if user_signed_in? && !current_user&.author?(@question)
-    = render 'shared/vote', param: @question
+    = render 'shared/vote', resource: @question
 
   .errors
 br

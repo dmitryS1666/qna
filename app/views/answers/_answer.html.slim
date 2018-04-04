@@ -13,7 +13,7 @@
       = answer.rating
 
       - if user_signed_in? && !current_user&.author?(answer)
-        = render 'shared/vote', param: answer
+        = render 'shared/vote', resource: answer
 
     .errors
     br
