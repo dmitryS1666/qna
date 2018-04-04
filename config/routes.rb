@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: 'questions#index'
+  root 'questions#index'
 
   concern :votable do
     member do
@@ -17,4 +17,5 @@ Rails.application.routes.draw do
 
   resources :attachments, only: :destroy
 
+  mount ActionCable.server => '/cable'
 end

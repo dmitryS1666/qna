@@ -4,5 +4,14 @@ $('.question-errors').html('')
     $('.question-errors').append('<%= j message %>')
   <% end %>
 <% else %>
+  $ ->
+    App.cable.subscriptions.create('QuestionsChannel', {
+      connected: ->
+      @perform 'follow'
+      ,
+
+      received: (data) ->
+      $('.question').html("<%= j render data %>")
+    })
   $('.question').html('<%= j render @question %>')
 <% end %>
