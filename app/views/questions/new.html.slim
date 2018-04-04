@@ -1,15 +1,24 @@
 =form_for @question do |f|
   = render 'shared/errors', resource: @question
 
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_area :body
+  .row
+    .input-field.col.s12
+      = f.label :title
+      = f.text_field :title
 
-  p Attachments:
-  p
-    = render 'attachments/form', f: f
+  .row
+    .input-field.col.s12
+      = f.label :body
+      = f.text_area :body, class: 'materialize-textarea'
 
-  = f.submit 'Add question'
+  .row
+    .input-field.col.s12
+    p Attachments:
+    p = render 'attachments/form', f: f
+
+  .row
+    .col
+      = f.submit 'Save', class: 'waves-effect waves-light btn'
+    .col
+      .btn.cancel-btn.grey.waves-effect.waves-light.lighten-4.black-text
+        = link_to 'Cancel', root_path

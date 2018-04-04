@@ -2,10 +2,23 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-questionEdit = ->
-  $('body').on 'click', '.edit-question-link', (e) ->
-    e.preventDefault();
-    $(this).hide();
-    $('form#edit-question').show();
+#questionEdit = ->
+#  $('body').on 'click', '.edit-question-link', (e) ->
+#    e.preventDefault();
+#    $(this).hide();
+#    $('form#edit-question').show();
+#
+#$(document).on("turbolinks:load", questionEdit);
 
-$(document).on("turbolinks:load", questionEdit);
+
+$ ->
+  questionsList = $(".questions-list")
+
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: ->
+      @perform 'follow'
+    ,
+
+    received: (data) ->
+      questionsList.append data
+  })

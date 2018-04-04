@@ -3,8 +3,7 @@ html
   head
     title Stackoverflow
     /= Gon::Base.render_data
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = action_cable_meta_tag
     = csrf_meta_tags
 
@@ -22,3 +21,8 @@ html
       p class='alert' = alert
 
       =yield
+
+    .footer
+      /= Gon::Base.render_data
+      = javascript_include_tag 'application'
+      = yield :scripts

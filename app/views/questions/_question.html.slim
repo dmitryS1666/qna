@@ -1,22 +1,26 @@
-h1 = @question.title
-h3 = @question.body
+/h2 = @question.title
+/h3 = @question.body
+/
+/h3 Rating:
+/
+/p.rating
+/  = @question.rating
+/
+/  -if user_signed_in? && !current_user&.author?(@question)
+/    = render 'shared/vote', resource: @question
+/
+/  .errors
+/br
+/
+/-if @question.attachments.any?
+/  p Attachments:
+/  = render 'attachments/attachment', resource: @question
+/  br
+/
+/-if current_user&.author?(@question)
+/  = render 'questions/form_edit', question: @question
+/  p = link_to 'Delete question',  question_path(@question), method: :delete
 
-h3 Rating:
 
-p.rating
-  = @question.rating
-
-  -if user_signed_in? && !current_user&.author?(@question)
-    = render 'shared/vote', resource: @question
-
-  .errors
-br
-
--if @question.attachments.any?
-  p Attachments:
-  = render 'attachments/attachment', resource: @question
-  br
-
--if current_user&.author?(@question)
-  = render 'questions/form_edit', question: @question
-  p = link_to 'Delete question',  question_path(@question), method: :delete
+.collection-item id=dom_id(question)
+  = link_to question.title, question_path(question)
