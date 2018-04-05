@@ -1,15 +1,18 @@
 .question
   = render @question
 
-h2 Answers
+h3 Answers
 .answers
-  = render @question.answers
+  /= render @question.answers
+  = render 'answers'
 
   -if user_signed_in?
     p Give your answer
 
     .answer-errors
     =render 'answers/form', question: @question, answer: @answer
+
+= render 'comments/list', commentable: @question, comment: @question.comments.build
 
 p = link_to 'Back', root_path
 p = link_to 'Ask question', new_question_path

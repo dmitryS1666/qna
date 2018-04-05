@@ -9,4 +9,26 @@ answerEdit = ->
     answer_id = $(this).data('answerId');
     $('form#edit-answer-' + answer_id).show();
 
+
+action_cable_answer = ->
+  answersList = $("#answers_list")
+
+  appendAnswer = (data) ->
+    console.log(data);
+    return if $("#answer_#{data.id}")[0]?
+    answersList.append App.utils.render('answer', data)
+
+  App.cable.subscriptions.create "AnswersChannel", {
+    connected: ->
+      @follow()
+    ,
+    follow: ->
+      return unless gon.question_id
+      @perform 'follow', id: gon.question_id
+
+    received: (data) ->
+      appendAnswer(data)
+  }
+
 $(document).on("turbolinks:load", answerEdit);
+$(document).on("turbolinks:load", action_cable_answer);
