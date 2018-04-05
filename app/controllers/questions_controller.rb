@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include Voted
+  include Comentabled
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :destroy, :update]
