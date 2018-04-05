@@ -5,9 +5,9 @@ module Comentabled
     @item = controller_name.classify.constantize.find(params[:id])
 
     if @item.class.name == 'Question'
-      @question_id = @item.id
+      @question_id = @item.question_id
     elsif @item.class.name == 'Answer'
-      @question_id = @item.question.id
+      @question_id = @item.question_id
     end
 
     @comment = @item.comments.new(comment_params)

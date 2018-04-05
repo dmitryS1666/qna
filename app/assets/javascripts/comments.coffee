@@ -1,6 +1,6 @@
 ready = ->
     $questionId = $('#question').data('id')
-    App.cable.subscriptions.create('CommentChannel', $questionId {
+    App.cable.subscriptions.create('CommentChannel', id: $questionId {
         connected: ->
             @perform 'follow'
         ,
