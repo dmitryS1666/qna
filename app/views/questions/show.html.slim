@@ -1,9 +1,10 @@
 .question
   = render @question
 
-h2 Answers
+h3 Answers
 .answers
-  = render @question.answers
+  /= render @question.answers
+  = render 'answers'
 
   -if user_signed_in?
     p Give your answer

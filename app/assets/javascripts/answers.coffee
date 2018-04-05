@@ -13,14 +13,24 @@ $(document).on("turbolinks:load", answerEdit);
 
 
 $ ->
+  answersList = $("#answers_list")
+
+  appendAnswer = (data) ->
+    console.log(data);
+    return if $("#answer_#{data.id}")[0]?
+    answersList.append App.utils.render('answer', data)
+
   App.cable.subscriptions.create "AnswersChannel", {
     connected: ->
-      @follow()
-
-    follow: ->
-      return unless gon.question_id
-      @perform 'follow', id: gon.question_id
+#      @follow()
+    connected: ->
+      @perform 'follow'
+    ,
+#    follow: ->
+#      return unless gon.question_id
+#      @perform 'follow', id: gon.question_id
 
     received: (data) ->
-      appendAnswer(data)
+      answersList.append data
+#      appendAnswer(data)
   }

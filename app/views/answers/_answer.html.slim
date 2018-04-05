@@ -1,34 +1,35 @@
 - if answer.persisted?
+  .answer.collection-item.section id=dom_id(answer)
+    .answer-info
+      div id="answer_#{answer.id}"
 
-  div id="answer_#{answer.id}"
+        -if answer.best
+          h3 Best answer
 
-    -if answer.best
-      h3 Best answer
+        = answer.body
+        br
 
-      = answer.body
-    br
+        h5 Rating:
+        p.rating
+          = answer.rating
 
-    h3 Rating:
-    p.rating
-      = answer.rating
+        - if user_signed_in? && !current_user&.author?(answer)
+          = render 'shared/vote', resource: answer
 
-      - if user_signed_in? && !current_user&.author?(answer)
-        = render 'shared/vote', resource: answer
+        .errors
+        br
 
-    .errors
-    br
+        -if answer.attachments.any?
+          p Attachments:
+          = render 'attachments/attachment', resource: answer
+          br
 
-    -if answer.attachments.any?
-      p Attachments:
-      = render 'attachments/attachment', resource: answer
+        -if current_user&.author?(answer)
+          = render 'answers/form_edit', answer: answer
+          br
+          = link_to 'Delete answer', answer, method: :delete, remote: true
+          br
+
+        -if current_user&.author?(answer.question)
+          = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
       br
-
-    -if current_user&.author?(answer)
-      = render 'answers/form_edit', answer: answer
-      br
-      = link_to 'Delete answer', answer, method: :delete, remote: true
-      br
-
-    -if current_user&.author?(answer.question)
-      = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
-  br
