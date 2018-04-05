@@ -21,5 +21,8 @@ class CommentsController < ApplicationController
 
   def publish_comment
     return if @comment.errors.any?
+    ActionCable.server.broadcast(
+        "questions/#{@answer.question_id}/answers", @answer
+    )
   end
 end

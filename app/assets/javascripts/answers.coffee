@@ -20,17 +20,14 @@ action_cable_answer = ->
 
   App.cable.subscriptions.create "AnswersChannel", {
     connected: ->
-#      @follow()
-    connected: ->
-      @perform 'follow'
+      @follow()
     ,
-#    follow: ->
-#      return unless gon.question_id
-#      @perform 'follow', id: gon.question_id
+    follow: ->
+      return unless gon.question_id
+      @perform 'follow', id: gon.question_id
 
     received: (data) ->
-      answersList.append data
-#      appendAnswer(data)
+      appendAnswer(data)
   }
 
 $(document).on("turbolinks:load", answerEdit);
