@@ -8,10 +8,9 @@ questionEdit = ->
     $(this).hide();
     $('form#edit-question').show();
 
-$(document).on("turbolinks:load", questionEdit);
 
 
-$ ->
+action_cable_question = ->
   questionsList = $(".questions-list")
 
   App.cable.subscriptions.create('QuestionsChannel', {
@@ -22,3 +21,7 @@ $ ->
     received: (data) ->
       questionsList.append data
   })
+
+
+$(document).on("turbolinks:load", questionEdit);
+$(document).on("turbolinks:load", action_cable_question);
