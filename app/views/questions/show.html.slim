@@ -12,5 +12,7 @@ h3 Answers
     .answer-errors
     =render 'answers/form', question: @question, answer: @answer
 
+= render 'comments/list', commentable: @question, comment: @question.comments.build
+
 p = link_to 'Back', root_path
 p = link_to 'Ask question', new_question_path
