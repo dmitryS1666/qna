@@ -36,6 +36,30 @@ feature 'Authorization from providers', %q{
       visit new_user_session_path
       click_on 'Sign in with Twitter'
 
+      expect(page).to have_content('Success login!')
+    end
+  end
+
+  describe 'use Github' do
+    scenario 'User not register on the servise, only Github', js: true do
+      mock_auth_hash(:github, nil)
+      user.update!(email: email)
+
+      visit new_user_session_path
+      click_on 'Sign in with GitHub'
+      open_email(email)
+      current_email.click_link 'Confirm my account'
+
+      expect(page).to have_content('Succes login!')
+    end
+
+    scenario 'Registred and authorized user to authenticate', js: true do
+      auth = mock_auth_hash(:github, user.email)
+      create(:authorization, user: user, provider: auth.provider, uid: auth.uid)
+
+      visit new_user_session_path
+      click_on 'Sign in with GitHub'
+
       expect(page).to have_content('Succes login!')
     end
   end

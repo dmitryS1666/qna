@@ -5,11 +5,10 @@ ready = ->
             @perform 'follow'
         ,
         received: ->
-            if (data.comment.commented_type == 'Question') {
+            if data.comment.commented_type == 'Question'
                 $('#question').find('.comment').append("<p>"+data.comment.body+"</p>")
-            } else {
+            else
                 $("#answer-id-"+data.comment.commented_id).find('.comment').append("<p>"+data.comment.body+"</p>")
-            }
     })
 
 $(document).on('turbolinks:load', ready)

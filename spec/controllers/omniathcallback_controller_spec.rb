@@ -48,7 +48,7 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       before { get :github }
 
       it 'redirects to new_user_session_path' do
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(new_user_session_path)
       end
 
       it 'create new user' do

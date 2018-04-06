@@ -5,13 +5,11 @@ html
     = csrf_meta_tags
     = action_cable_meta_tag
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
     .navbar-fixed
       nav
-        /.nav-wrapper class="#{ request.subdomains.first == 'green' ? 'light-green' : 'light-blue' }"
-        .nav-wrapper
+        .nav-wrapper class="#{ request.subdomains.first == 'green' ? 'light-green' : 'light-blue' }"
           = link_to 'Stackoverflow Demo', root_path, class: 'brand-logo'
 
         ul#nav-mobile.hide-on-med-and-down.right
