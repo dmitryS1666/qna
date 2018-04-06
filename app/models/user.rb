@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:github]
 
   def author?(resource)
     resource.user_id == self.id
