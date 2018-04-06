@@ -44,6 +44,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
+  gem 'capybara-email'
 end
 
 group :development do
