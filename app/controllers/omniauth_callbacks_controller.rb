@@ -1,14 +1,10 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def github
-    @user = User.find_for_oauth(request.env['omniauth.auth'])
-    if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Github') if is_navigational_format?
-    end
+    sign_from_omniauth
   end
 
   def facebook
-    #render json: request.env['omniauth.auth']
+    # sign_from_omniauth
   end
 
   def twitter
@@ -16,9 +12,18 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   private
-
   def sign_from_omniauth
     @user = User.find_for_oauth(auth)
+    if @user&.persisted?
+      sign_in_and_redirect @user, event: :authentication
+    else
+      flash[:notice] = 'Email is required to compete sign up'
+      render 'common/confirm_mail', locals: { auth: auth }
+    end
+  end
+
+  def auth
+    request.env['omniauth.auth'] || OmniAuth::AuthHash.new(params[:auth])
   end
 
 end
