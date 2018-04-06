@@ -5,20 +5,24 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: :create
   before_action :set_answer, only: [:destroy, :update, :make_best]
-  after_action :publish_answer, only: [:create]
+  after_action :publish_answer, only: :create
+  before_action :load_answer, only: :update
+
+  respond_to :js
+  respond_to :json, only: :create
 
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    @answer.save
+    respond_with(@answer.save)
   end
 
   def update
-    @answer.update(answer_params) if current_user.author?(@answer)
+    respond_with(@answer.update(answer_params)) if current_user.author?(@answer)
   end
 
   def destroy
-    @answer.destroy if current_user.author?(@answer)
+    respond_with(@answer.destroy) if current_user.author?(@answer)
   end
 
   def make_best
@@ -31,10 +35,15 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
   end
 
+  def load_answer
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+  end
+
   def publish_answer
     return if @answer.errors.any?
     ActionCable.server.broadcast(
-      "questions/#{@answer.question_id}/answers", @answer
+        "questions/#{@answer.question_id}/answers", @answer
     )
   end
 
