@@ -6,4 +6,19 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       set_flash_message(:notice, :success, kind: 'Github') if is_navigational_format?
     end
   end
+
+  def facebook
+    #render json: request.env['omniauth.auth']
+  end
+
+  def twitter
+    sign_from_omniauth
+  end
+
+  private
+
+  def sign_from_omniauth
+    @user = User.find_for_oauth(auth)
+  end
+
 end

@@ -258,6 +258,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # scope - набор прав для аутентификации
   config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret, scope: [:email]
+  config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

@@ -29,6 +29,7 @@ gem 'material_icons'
 gem 'responders', '~> 2.0'
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-twitter'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
