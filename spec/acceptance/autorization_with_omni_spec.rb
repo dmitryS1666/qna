@@ -5,27 +5,23 @@ feature 'Authorization from providers', %q{
   As a user
   I want to registration using my other social network accounts
 } do
-  given!(:user) { create(:user) }
+  let(:user) { create(:user) }
+  let(:email) { 'test@test.ru' }
   describe 'use Twitter' do
     scenario 'User not register on the servise, only Twitter', js: true do
-      mock_auth_hash(:twitter, nil)
+      auth = mock_auth_hash(:twitter, nil)
 
       visit new_user_session_path
-
       click_on 'Sign in with Twitter'
-
       expect(page).to have_content 'Email is required to compete sign up'
 
-      fill_in 'Email', with: "twitter@test.ru"
+      fill_in 'Email', with: email
       click_on 'Confim email'
 
-      message = ActionMailer::Base.deliveries.last.body.raw_source
-      doc = Nokogiri::HTML.parse(message)
-      url = doc.css("a").map { |link| link[:href] }.first
-      visit url
+      open_email(email)
+      current_email.click_link 'Confirm my account'
 
       click_on 'Sign in with Twitter'
-
       expect(page).to have_content('Succes login!')
     end
 
