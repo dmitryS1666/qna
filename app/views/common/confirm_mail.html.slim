@@ -1,8 +1,5 @@
 = form_tag users_auth_sign_up_path, method: :post do
-  =session[:provider]
   = label_tag 'auth_info_email', 'Email'
   = email_field 'auth[info]', :email
-  = hidden_field_tag 'auth[provider]', auth.provider
-  = hidden_field_tag 'auth[uid]', auth.uid
 
-  = submit_tag 'Confim email'
+= submit_tag 'Confim email'
