@@ -27,6 +27,7 @@ gem 'cocoon'
 gem 'materialize-sass'
 gem 'material_icons'
 gem 'responders', '~> 2.0'
+gem 'cancancan'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
