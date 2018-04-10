@@ -17,6 +17,7 @@ RSpec.describe Ability, type: :model do
     let(:user) { create(:user) }
     let(:other) { create(:user) }
     let(:question) { create :question, user: user }
+    let(:foreign_question) { create :question, user: other }
     let(:answer) { create :answer, user: user, question: question }
     let(:foreign_answer) { create :answer, user: other, question: question }
 
@@ -29,19 +30,31 @@ RSpec.describe Ability, type: :model do
 
     context 'Question' do
       it { should be_able_to :update, question, user: user }
+      it { should_not be_able_to :update, foreign_question, user: user }
       it { should be_able_to :destroy, question, user: user }
+      it { should_not be_able_to :destroy, foreign_question, user: user }
       it { should be_able_to :comment, Question }
       it { should_not be_able_to :vote_up, question, user: user }
       it { should_not be_able_to :vote_down, question, user: user }
       it { should_not be_able_to :vote_reset, question, user: user }
+      it { should be_able_to :vote_up, foreign_question, user: user }
+      it { should be_able_to :vote_down, foreign_question, user: user }
+      it { should be_able_to :vote_reset, foreign_question, user: user }
     end
     context 'Answer' do
       it { should be_able_to :update, answer, user: user }
+      it { should_not be_able_to :update, foreign_answer, user: user }
       it { should be_able_to :destroy, answer, user: user }
+      it { should_not be_able_to :destroy, foreign_answer, user: user }
       it { should be_able_to :comment, Answer }
       it { should_not be_able_to :vote_up, answer, user: user }
       it { should_not be_able_to :vote_down, answer, user: user }
       it { should_not be_able_to :vote_reset, answer, user: user }
+      it { should be_able_to :vote_up, foreign_answer, user: user }
+      it { should be_able_to :vote_down, foreign_answer, user: user }
+      it { should be_able_to :vote_reset, foreign_answer, user: user }
+      it { should be_able_to :best_answer, foreign_answer, user: user }
+      it { should_not be_able_to :best_answer, create(:answer, user: other, question: foreign_question), user: user }
     end
   end
 
