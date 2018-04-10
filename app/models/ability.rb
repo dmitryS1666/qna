@@ -35,9 +35,13 @@ class Ability
       user.owner_of?(answer.question) && !answer.best?
     end
 
-    alias_action :vote_up, :vote_down, :vote_reset, to: :vote_pull
+    alias_action :vote_up, :vote_down, to: :vote_pull
     can :vote_pull, [Question, Answer] do |type|
       !user.owner_of?(type)
+    end
+
+    can :vote_reset, Answer do |answer|
+      user.owner_of?(answer.question)
     end
   end
 end
