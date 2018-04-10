@@ -8,8 +8,8 @@ class AnswersController < ApplicationController
   after_action :publish_answer, only: :create
   before_action :load_answer, only: :update
 
-  respond_to :js
-  respond_to :json, only: :create
+  respond_to :js, only: %i[create destroy update]
+  authorize_resource
 
   def create
     @answer = @question.answers.new(answer_params)

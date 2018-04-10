@@ -13,7 +13,7 @@
         p.rating
           = answer.rating
 
-        - if user_signed_in? && !current_user&.author?(answer)
+        - if can?(:vote_pull, resource)
           = render 'shared/vote', resource: answer
 
         .errors
@@ -24,12 +24,12 @@
           = render 'attachments/attachment', resource: answer
           br
 
-        -if current_user&.author?(answer)
+        - if can?(:update, answer)
           = render 'answers/form_edit', answer: answer
           br
           = link_to 'Delete answer', answer, method: :delete, remote: true
           br
 
-        -if current_user&.author?(answer.question)
+        - if can?(:best_answer, answer)
           = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
       br
