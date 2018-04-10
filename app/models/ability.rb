@@ -40,8 +40,8 @@ class Ability
       !user.owner_of?(type)
     end
 
-    can :vote_reset, Answer do |answer|
-      user.owner_of?(answer.question)
+    can :vote_reset, Vote do |vote|
+      user.owner_of?(vote)
     end
   end
 end
