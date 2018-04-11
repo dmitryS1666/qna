@@ -28,20 +28,20 @@ class Ability
 
     alias_action :update, :destroy, to: :subject_pull
     can :subject_pull, [Question, Answer] do |type|
-      user.owner_of?(type)
+      user.author?(type)
     end
 
     can :best_answer, Answer do |answer|
-      user.owner_of?(answer.question) && !answer.best?
+      user.author?(answer.question) && !answer.best?
     end
 
     alias_action :vote_up, :vote_down, to: :vote_pull
     can :vote_pull, [Question, Answer] do |type|
-      !user.owner_of?(type)
+      !user.author?(type)
     end
 
     can :vote_reset, Vote do |vote|
-      user.owner_of?(vote)
+      user.author?(vote)
     end
   end
 end
