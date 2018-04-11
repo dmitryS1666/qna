@@ -3,10 +3,9 @@
 
 h3 Answers
 .answers
-  /= render @question.answers
   = render 'answers'
 
-  -if user_signed_in?
+  - if can?(:update, @question)
     p Give your answer
 
     .answer-errors

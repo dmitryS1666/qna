@@ -1,21 +1,13 @@
-h3 Questions
-
-.questions-list.collection
-  /table
-  /  tr
-  /    th Title
-  /    th Body
-  /
-  /  - @questions.each do |question|
-  /    tr
-  /      td = link_to question.title, question_path(question)
-  /      td = truncate(question.body, length: 20)
-
-  - if @questions.any?
-    = render @questions
+table.question_list
+  tr
+    th List of questions
+  - if @questions.present?
+    - @questions.each do |question|
+      tr
+        td= link_to question.title, question
   - else
-    div
-      .col.s6.offset-s3.center No questions found
-
-p= link_to 'Back', root_path
-p= link_to 'Add question', new_question_path
+    tr
+      td 'No questions :('
+tr
+  td
+    p= link_to 'Ask question', new_question_path if can?(:create, Question)

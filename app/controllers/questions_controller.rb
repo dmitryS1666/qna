@@ -7,7 +7,8 @@ class QuestionsController < ApplicationController
   after_action :publish_question, only: [:create]
   before_action :build_answer, only: :show
 
-  respond_to :html
+  respond_to :html, :json
+  authorize_resource
 
   def index
     respond_with(@questions = Question.all)
@@ -32,7 +33,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-      respond_with(@question.destroy) if current_user.owner_of?(@question)
+    respond_with(@question.destroy) if current_user.owner_of?(@question)
   end
 
   private
