@@ -99,4 +99,34 @@ describe 'Questions API' do
 
     end
   end
+
+  describe 'GET /create' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        get '/api/v1/questions/', params: { action: :create, format: :json }
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        get '/api/v1/questions/', params: { action: :create, format: :json, access_token: '1234' }
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+
+      before { post '/api/v1/questions/', params: { action: :create, format: :json, access_token: access_token.token, question: attributes_for(:question) } }
+
+      it 'returns 200 status code' do
+        expect(response).to be_success
+      end
+
+      it 'Check count of question after create' do
+        expect{ post '/api/v1/questions/', params: { action: :create, format: :json, access_token: access_token.token, question: attributes_for(:question) } }.to change { Question.count }.by(1)
+      end
+
+    end
+  end
+
 end
