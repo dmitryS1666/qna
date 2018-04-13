@@ -146,7 +146,7 @@ describe AnswersController do
     end
   end
 
-  describe 'POST#create_vote' do
+  describe 'POST #create_vote' do
     context 'non-author tries to vote' do
       sign_in_user
 
@@ -199,7 +199,7 @@ describe AnswersController do
     end
   end
 
-  describe 'DELETE#destroy_vote' do
+  describe 'DELETE #destroy_vote' do
     context 'non-author tries to cancel' do
       sign_in_user
 

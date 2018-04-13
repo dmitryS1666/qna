@@ -2,24 +2,15 @@ require 'rails_helper'
 
 describe 'Profile API' do
   describe 'GET /me' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/me', params: { format: :json }
-        expect(response.status).to eq 401
-      end
+    it_behaves_like "API Authenticable"
 
-      it 'returns 401 status if there is access_token is invalid' do
-        get '/api/v1/profiles/me', params: { format: :json, access_token: '1234' }
-        expect(response.status).to eq 401
-      end
-    end
-  end
+    context 'authorized' do
+      let(:me) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-  context 'authorized' do
-    let(:me) { create(:user) }
-    let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      before { get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token } }
 
-    before { get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token } }
+      it { expect(response).to be_success }
 
     it 'returns 200 ststus' do
       expect(response.status).to be_success
@@ -29,7 +20,6 @@ describe 'Profile API' do
       it "contains #{attr}" do
         expect(response.body).to be_json_eql(me.send(attr.to_sym).to_json).at_path(attr)
       end
-    end
 
     %w(password encrypted_password).each do |attr|
       it "does not contain #{attr}" do
@@ -37,25 +27,18 @@ describe 'Profile API' do
       end
     end
 
+    def do_request(options = {})
+      get '/api/v1/profiles/me', params: {format: :json}.merge(options)
+    end
   end
 
   describe 'GET /index' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/', params: { format: :json }
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if there is access_token is invalid' do
-        get '/api/v1/profiles/', params: { format: :json, access_token: '1234' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-      let(:other_users) { create(:user, 11) }
+      let!(:other_users) { create_list(:user, 11) }
 
       before { get '/api/v1/profiles/', params: { format: :json, access_token: access_token.token } }
 
@@ -65,7 +48,7 @@ describe 'Profile API' do
         expect(response.body).to_not be_json_eql(other_users.to_json)
       end
 
-      %w(id email created_at updated_at admin reputation).each do |attr|
+      %w(id email created_at updated_at admin).each do |attr|
         it "contains #{attr}" do
           expect(response.body).to be_json_eql(other_users.first.send(attr.to_sym).to_json).at_path(attr)
         end
@@ -77,6 +60,9 @@ describe 'Profile API' do
         end
       end
     end
-  end
 
+    def do_request(options = {})
+      get '/api/v1/profiles/', { format: :json }.merge(options)
+    end
+  end
 end

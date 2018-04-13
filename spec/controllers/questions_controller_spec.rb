@@ -267,4 +267,7 @@ describe QuestionsController do
     end
   end
 
+  let!(:object_name) { :question }
+  it_behaves_like "commentabled"
+  it_behaves_like "rated"
 end
