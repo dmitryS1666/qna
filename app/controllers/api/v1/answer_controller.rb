@@ -3,7 +3,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   before_action :load_question, only: %i[index create]
 
   def create
-    @answer = Answer.create(answer_params.merge(question: @question, user: current_resource_owner))
+    @answer = @question.answers.create(answer_params.merge(user: current_resource_owner))
     respond_with @answer
   end
 
