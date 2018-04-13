@@ -8,8 +8,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource :profiles, only: :index do
+      resources :profiles, only: :index do
         get :me, on: :collection
+      end
+      resources :questions, only: %i[index create show], shallow: true do
+        resources :answers, only: %i[index create show]
       end
     end
   end

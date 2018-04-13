@@ -32,6 +32,10 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'doorkeeper', '4.2.6'
+gem 'active_model_serializers'
+# для ускорения работы преобразования to_json
+gem 'oj'
+gem 'oj_mimic_json'
 
 
 group :development, :test do
