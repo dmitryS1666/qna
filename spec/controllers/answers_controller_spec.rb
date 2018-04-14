@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 describe AnswersController do
-  let!(:question)       { create(:question) }
-  let!(:answer)         { create(:answer) }
-  let!(:another_answer) { create(:answer) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
+  let(:answer) { create(:answer, question: question, user: user) }
+  let!(:another_answer)   { create(:answer) }
   let!(:another_question) { create(:answer) }
 
   describe 'POST #create' do
@@ -55,9 +56,6 @@ describe AnswersController do
     end
 
     context 'Non-author tries to delete a question' do
-      let!(:another_user) { create(:user) }
-      let!(:another_answer) { create(:answer, user: another_user, question: question) }
-
       it 'doesn`t delete question from database' do
         expect { delete :destroy, params: { id: another_answer, format: :js } }.to_not change(Answer, :count)
       end

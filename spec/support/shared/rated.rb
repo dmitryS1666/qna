@@ -4,7 +4,7 @@ shared_examples_for "rated" do
 
   describe 'POST #create_vote' do
     context 'non-author tries to vote' do
-      before { sign_in user }
+      sign_in_user
       context 'non-author did not vote before' do
         it 'saves new vote' do
           expect { post :create_vote, params: { id: resource.id, plus: true }}.to change(resource.votes, :count).by (1)
@@ -31,7 +31,7 @@ shared_examples_for "rated" do
     end
 
     context 'author tries to vote' do
-      before { sign_in user }
+      before { sign_in resource.user }
       it 'doesn`t save new vote' do
         expect { post :create_vote, params: { id: resource.id }}.to_not change(resource.votes, :count)
       end

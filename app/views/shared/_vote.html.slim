@@ -4,6 +4,6 @@ p.vote_up.vote
 p.vote_down.vote
   = link_to 'Dislike', new_polymorphic_path(resource), method: :post, remote: true
 
-- if can?(:vote_reset, resource)
+- if can?(:cancel_vote, resource)
   p.cancel_vote.vote
     = link_to 'Cancel your vote', polymorphic_path(resource), method: :delete, remote: true

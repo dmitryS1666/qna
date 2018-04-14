@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OmniauthCallbacksController, type: :controller do
+describe OmniauthCallbacksController do
   let(:user) { create(:user) }
 
   describe 'twitter' do
