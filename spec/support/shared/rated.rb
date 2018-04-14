@@ -1,7 +1,5 @@
 shared_examples_for "rated" do
-
   let(:user) { create :user }
-  # let(:user) { create :user }
 
   describe 'POST #create_vote' do
     context 'non-author tries to vote' do
