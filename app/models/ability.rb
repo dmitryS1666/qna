@@ -35,12 +35,12 @@ class Ability
       user.author?(answer.question) && !answer.best?
     end
 
-    alias_action :vote_up, :vote_down, to: :vote_pull
+    alias_action :create_vote, :delete_vote, to: :vote_pull
     can :vote_pull, [Question, Answer] do |type|
       !user.author?(type)
     end
 
-    can :vote_reset, Vote do |vote|
+    can :cancel_vote, Vote do |vote|
       user.author?(vote)
     end
   end

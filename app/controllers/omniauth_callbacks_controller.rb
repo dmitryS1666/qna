@@ -5,7 +5,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def twitter; end
 
-  def sign_up; end
+  def sign_up
+    session[:auth] = nil
+  end
 
   private
 
