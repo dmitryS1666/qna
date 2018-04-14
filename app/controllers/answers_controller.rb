@@ -3,15 +3,15 @@ class AnswersController < ApplicationController
   include Comentabled
 
   before_action :authenticate_user!
-  before_action :set_question, only: :create
-  before_action :set_answer, only: [:destroy, :update, :make_best]
-  after_action :publish_answer, only: :create
-  before_action :load_answer, only: :update
+  before_action :load_answer, only: %i[destroy update best_answer]
+  before_action :load_question, only: %i[update destroy best_answer]
+  after_action :publish_answer, only: %i[create]
 
   respond_to :js, only: %i[create destroy update]
   authorize_resource
 
   def create
+    @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
     respond_with(@answer.save)
@@ -31,10 +31,6 @@ class AnswersController < ApplicationController
 
   private
 
-  def set_answer
-    @answer = Answer.find(params[:id])
-  end
-
   def load_answer
     @answer = Answer.find(params[:id])
     @question = @answer.question
@@ -51,8 +47,8 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
-  def set_question
-    @question = Question.find(params[:question_id])
+  def load_question
+    @question = @answer.question
   end
 
 end
