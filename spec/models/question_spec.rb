@@ -24,11 +24,24 @@ RSpec.describe Question, type: :model do
   end
 
   let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
   let(:question) { create :question, user: user }
 
   describe '#subscribed?' do
     it 'user can subscribe?' do
       expect(question).to be_subscribed(user)
+    end
+  end
+
+  describe '#add_subscribe' do
+    it 'create a new subscribe for question' do
+      expect(question.subscriptions).to include(question.add_subscribe(other_user))
+    end
+  end
+
+  describe '#del_subscribe' do
+    it 'del subscribe for question' do
+      expect(question.subscriptions).to_not include(question.del_subscribe(user))
     end
   end
 
