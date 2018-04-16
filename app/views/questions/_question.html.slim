@@ -5,6 +5,7 @@ p
   =render 'common/file_list', resource: @question
   =render 'common/rating', resource: @question
   =render 'common/comments', resource: @question, url: comment_question_path(@question)
+  =render 'common/subscription', resource: @question
 
 - if can?(:update, @question)
   =form_for @question, remote: true do |form|
@@ -14,5 +15,6 @@ p
     .files
       = render 'common/edit_file_field', form: form
     = form.submit 'Save'
+
   p= link_to 'Edit question', '', class: 'edit-question-button', id: 'edit-question-button'
   p= link_to 'Delete Question', question_path(@question), method: :delete
