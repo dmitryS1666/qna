@@ -36,6 +36,9 @@ gem 'active_model_serializers'
 # для ускорения работы преобразования to_json
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'skim'
+gem 'sprockets'
+gem 'gon'
 
 
 group :development, :test do

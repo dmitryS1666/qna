@@ -1,0 +1,16 @@
+.question-info#question_info
+  .section
+    h5.question-title =@question.title
+    p.question-body =@question.body
+    = render 'shared/vote', votable: @question
+  .question-controls
+    .row
+      - if can?(:update?, @question)
+        .col
+          = link_to 'Edit', '', class: 'edit-question-link', id: "add_question_btn"
+      - if can?(:destroy?, @question)
+        .col
+          = link_to 'Delete', @question, method: :delete
+
+= render 'form_edit'
+= render 'comments/list', commentable: @question, comment: @question.comments.build

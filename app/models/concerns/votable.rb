@@ -5,24 +5,24 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
   end
 
-  def give_plus_vote(user)
-    votes.create(user: user, value: 1)
-  end
-
-  def give_minus_vote(user)
-    votes.create(user: user, value: -1)
-  end
-
-  def cancel_vote(user)
-    votes.where(user: user).delete_all
+  def votes_sum
+    votes.sum(:value)
   end
 
   def voted_by?(user)
     votes.where(user: user).exists?
   end
 
-  def rating
-    votes.sum :value
+  def cancel_vote(user)
+    vote = votes.find_by(user: user)
+    return false unless vote
+    vote.destroy
+    true
   end
 
+  def vote!(user, value)
+    vote = votes.find_or_initialize_by(user: user)
+    vote.value = value
+    vote.save
+  end
 end

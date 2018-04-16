@@ -2,51 +2,40 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :find_voted, only: [:create_vote, :delete_vote]
+    before_action :set_votable, only: [:vote_up, :vote_down, :cancel_vote]
   end
 
-  def create_vote
-    if vote_permission?
-      add_vote
-    else
-      render_error("You are not able to vote")
-    end
+  def vote_up
+    @votable.vote!(current_user, 1)
+    render_votable
   end
 
-  def delete_vote
-    if @resource.voted_by?(current_user)
-      @resource.cancel_vote(current_user)
-      render_success
+  def vote_down
+    @votable.vote!(current_user, -1)
+    render_votable
+  end
+
+  def cancel_vote
+    if @votable.cancel_vote(current_user)
+      render_votable
     else
-      render_error("Can`t cancel vote")
+      render status: :forbidden
     end
   end
 
   private
 
-  def find_voted
-    @resource = controller_name.classify.constantize.find(params[:id])
+  def render_votable
+    render json: {
+        total: @votable.votes_sum,
+        is_voted: @votable.voted_by?(current_user),
+        votable_id: @votable.id,
+        votable_type: @votable.class.name
+    }
   end
 
-  def add_vote
-    if params[:plus]
-      @resource.give_plus_vote(current_user)
-    else
-      @resource.give_minus_vote(current_user)
-    end
-    render_success
+  def set_votable
+    @votable = controller_name.classify.constantize.find(params[:id])
+    authorize @votable
   end
-
-  def vote_permission?
-    !(current_user.author?(@resource) || @resource.voted_by?(current_user))
-  end
-
-  def render_success
-    render json: { rating: @resource.rating }
-  end
-
-  def render_error(message)
-    render json: { error_message: message }, status: :forbidden
-  end
-
 end

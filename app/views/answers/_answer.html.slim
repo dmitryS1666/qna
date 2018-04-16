@@ -1,35 +1,37 @@
 - if answer.persisted?
   .answer.collection-item.section id=dom_id(answer)
     .answer-info
-      div id="answer_#{answer.id}"
+      - if answer.best?
+        span.badge.green.white-text.answer-best-badge best
+      p.answer-body = answer.body
+      br
 
-        -if answer.best
-          h3 Best answer
+      h5 Rating:
+      p.rating
+        = answer.rating
 
-        = answer.body
-        br
-
-        h5 Rating:
-        p.rating
-          = answer.rating
-
-        - if can?(:vote_pull, resource)
-          = render 'shared/vote', resource: answer
+      - if can?(:vote_pull, resource)
+        = render 'shared/vote', resource: answer
 
         .errors
         br
 
+    .answer-controls
+      .row
         -if answer.attachments.any?
-          p Attachments:
-          = render 'attachments/attachment', resource: answer
-          br
+          .col
+            p Attachments:
+            = render 'attachments/attachment', resource: answer
+            br
 
         - if can?(:update, answer)
-          = render 'answers/form_edit', answer: answer
-          br
-          = link_to 'Delete answer', answer, method: :delete, remote: true
-          br
+          .col
+            = render 'answers/form_edit', answer: answer
+            br
+            = link_to 'Delete answer', answer, method: :delete, remote: true
+            br
 
         - if can?(:best_answer, answer)
-          = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
-      br
+          .col
+            = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
+            br

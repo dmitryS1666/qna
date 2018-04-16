@@ -9,14 +9,11 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
-//
-//= require jquery3
+//= require skim
+//= require_tree ./templates
 //= require rails-ujs
-//= require action_cable
-//= require cocoon
-//= require jquery.remotipart
 //= require turbolinks
+//= require jquery
+//= require jquery_ujs
+//= require cocoon
 //= require_tree .
-
-var App = App || {};
-App.cable = ActionCable.createConsumer();

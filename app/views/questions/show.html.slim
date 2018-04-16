@@ -1,17 +1,10 @@
-.question
-  = render @question
+= render 'question_block'
 
-h3 Answers
-.answers
-  = render 'answers'
+= render 'answers'
 
-  - if can?(:update, @question)
-    p Give your answer
+- if can?(:create, Answer)
+  = render 'shared/add_btn', id: "add_answer_btn"
+  = render 'answers/form', id: 'new_answer_form', answer: @question.answers.new
 
-    .answer-errors
-    =render 'answers/form', question: @question, answer: @answer
-
-= render 'comments/list', commentable: @question, comment: @question.comments.build
-
-p = link_to 'Back', root_path
-p = link_to 'Ask question', new_question_path
+= content_for :scripts
+  = javascript_include_tag 'answers'
