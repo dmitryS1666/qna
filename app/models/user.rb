@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :questions
   has_many :ratings
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def owner_of?(resource)
     id == resource.user_id

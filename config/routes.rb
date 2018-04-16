@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   end
 
   resources :questions, shallow: true, concerns: %i[rates commented] do
+    post :subscribe, on: :member
+    delete :unsubscribe, on: :member
     resources :answers, only: %i[create destroy update], concerns: %i[rates commented] do
       post :best_answer, on: :member
     end

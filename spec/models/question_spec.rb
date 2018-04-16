@@ -8,6 +8,7 @@ RSpec.describe Question, type: :model do
   it { should have_many(:attachments)}
   it { should have_many(:ratings)}
   it { should have_many(:comments)}
+  it { should have_many(:subscriptions)}
 
   it { should accept_nested_attributes_for :attachments}
 
@@ -20,6 +21,28 @@ RSpec.describe Question, type: :model do
     should validate_length_of(:body).
         is_at_least(2).
         on(:create)
+  end
+
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+  let(:question) { create :question, user: user }
+
+  describe '#subscribed?' do
+    it 'user can subscribe?' do
+      expect(question).to be_subscribed(user)
+    end
+  end
+
+  describe '#add_subscribe' do
+    it 'create a new subscribe for question' do
+      expect(question.subscriptions).to include(question.add_subscribe(other_user))
+    end
+  end
+
+  describe '#del_subscribe' do
+    it 'del subscribe for question' do
+      expect(question.subscriptions).to_not include(question.del_subscribe(user))
+    end
   end
 
   let!(:object_name) { :question }
