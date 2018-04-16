@@ -145,5 +145,6 @@ describe AnswersController do
   end
 
   let!(:object_name) { :answer }
+  it_behaves_like "commentabled"
   it_behaves_like "rated"
 end

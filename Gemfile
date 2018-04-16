@@ -17,7 +17,6 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'rubocop', '~> 0.47.1', require: false
 gem 'slim-rails'
-gem 'rails-controller-testing'
 gem 'devise'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -47,13 +46,16 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'capybara-webkit' # sudo apt-get install qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
+  gem 'database_cleaner'
+  gem 'letter_opener'
 end
 
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'rails-controller-testing'
   gem 'launchy'
-  gem 'database_cleaner'
+  gem 'poltergeist'
   gem 'capybara-email'
   gem 'json_spec'
 end

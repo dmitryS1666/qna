@@ -1,5 +1,8 @@
-<% if @question.valid? %>
-  $('div.question').html('<%= j render "question_block" %>');
+<% if @question.errors.present? %>
+  <% @question.errors.full_messages.each do |message| %>
+    $('#errors').html('<%= j render 'common/errors', resource: @question %>');
+  <% end %>
 <% else %>
-  $('div#edit-question-form-container #validation-errors').html('<%= j render "validation_errors" %>');
+  $('#errors') .empty()
+  $('#question').html('<%= j render @question %>');
 <% end %>

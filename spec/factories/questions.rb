@@ -1,29 +1,16 @@
 FactoryBot.define do
-  sequence :title do |n|
-    "Title#{n}"
-  end
-
   factory :question do
-    title
-    body "MyText"
-    user
+    sequence(:title) { |n| "Why my transaction not work? #{n} question" }
+    body "Because you are not autorized"
+    association :user, factory: :user, strategy: :build
   end
 
-  factory :nil_attributes, class: 'Question' do
+  factory :question_with_rating, parent: :question do
+    after(:create) { |question| create(:rating, appraised: question)}
+  end
+
+  factory :wrong_question, class: "Question" do
     title nil
     body nil
-    user
-  end
-
-  factory :length_less_attributes, class: 'Question' do
-    title 'my'
-    body 'str'
-    user
-  end
-
-  factory :wrong_attributes, class: 'Question' do
-    title '1-2'
-    body ''
-    user
   end
 end
