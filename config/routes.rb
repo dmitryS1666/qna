@@ -30,13 +30,9 @@ Rails.application.routes.draw do
     end
   end
 
-  root 'questions#index'
-
-  concern :votable do
-    member do
-      post :vote_up
-      post :vote_down
-      post :cancel_vote
+  resources :questions, shallow: true, concerns: %i[rates commented] do
+    resources :answers, only: %i[create destroy update], concerns: %i[rates commented] do
+      post :best_answer, on: :member
     end
   end
 
