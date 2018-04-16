@@ -26,6 +26,10 @@ class Ability
     can :create, [Question, Answer, Attachment]
     can :comment, [Question, Answer]
 
+    can :subscribe, Question do |question|
+      !question.subscribed?(user)
+    end
+
     alias_action :update, :destroy, to: :subject_pull
     can :subject_pull, [Question, Answer] do |type|
       user.owner_of?(type)
