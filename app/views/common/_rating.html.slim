@@ -1,0 +1,10 @@
+.vote data-id="#{resource.id}"
+  - if user_signed_in? && ! current_user.owner_of?(resource)
+    = button_to '-', '', remote: true, id: 'vote-down-btn', class: "#{'btn_hide' if resource.voted?(current_user)}"
+    .vote_score
+      =resource.vote_score
+      = button_to '+', '', remote: true, id: 'vote-up-btn', class: "#{'btn_hide' if resource.voted?(current_user)}"
+      = button_to 'reset', '', id: 'vote-reset-btn', remote: true, class: "#{'btn_hide' unless resource.voted?(current_user)}"
+  - else
+    .vote_score
+      = resource.vote_score

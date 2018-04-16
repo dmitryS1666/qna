@@ -1,45 +1,24 @@
 require 'rails_helper'
 
-describe User do
+RSpec.describe User, type: :model do
+  it { should validate_presence_of :email }
+  it { should validate_presence_of :password }
+  it { should have_many(:answers)}
+  it { should have_many(:questions)}
+  it { should have_many(:ratings)}
+  it { should have_many(:authorizations)}
 
-  let!(:user) { create(:user) }
-  let!(:question) { create(:question, user: user) }
-  let!(:answer) { create(:answer, user: user) }
-  let!(:another_question) { create(:question) }
-  let!(:another_answer) { create(:question) }
+  describe 'method owner_of?' do
+    let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
+    let(:question) { create(:question, user: user) }
 
-  context 'association' do
-    it { should have_many(:questions).dependent :destroy }
-    it { should have_many(:answers).dependent :destroy }
-    it { should have_many(:votes).dependent :destroy }
-    it { should have_many(:authorizations)}
-  end
-
-  context 'validation' do
-    it { should validate_presence_of :email }
-    it { should validate_presence_of :password }
-  end
-
-  context 'User is an author of' do
-
-    context 'question' do
-      it 'returns true if user is an author' do
-        expect(user).to be_author(question)
-      end
-
-      it 'returns false if user is not an author' do
-        expect(user).to_not be_author(another_question)
-      end
+    it 'for associated object' do
+      expect(user).to be_owner_of(question)
     end
 
-    context 'answer' do
-      it 'returns true if user is an author' do
-        expect(user).to be_author(answer)
-      end
-
-      it 'returns false if user is not an author' do
-        expect(user).to_not be_author(another_answer)
-      end
+    it 'for not-associated object' do
+      expect(another_user).not_to be_owner_of(question)
     end
   end
 

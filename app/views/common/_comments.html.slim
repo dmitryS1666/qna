@@ -1,0 +1,9 @@
+.comment
+  - if resource.comments.present?
+    - resource.comments.each do |comment|
+      p= comment.body
+    - if user_signed_in?
+  .comment_form
+    p= form_for([resource, resource.comments.build], url: url, remote: true) do |f|
+      = f.text_area :body
+      = f.submit 'Add comment'

@@ -7,7 +7,7 @@ table.question_list
         td= link_to question.title, question
   - else
     tr
-      td 'No questions :('
+      td 'No questions'
 tr
   td
     p= link_to 'Ask question', new_question_path if can?(:create, Question)

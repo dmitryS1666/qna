@@ -1,0 +1,39 @@
+.answer
+  h2 New Answer
+  div id="answer-id-#{@answer.id}"
+    p= @answer.body
+    - if @attachments.length > 0
+      #attachments
+        ul
+          - for a in @attachments
+            li
+              a href=a.url #{a.name}
+    .vote data-id="#{@answer.id}"
+      - if gon.is_user_signed_in && gon.user_id != @answer.user_id
+        form.button_to action= "/answers/#{@answer.id}/vote_down" data-remote="true" method="post" id='vote-down-btn'
+          input name="commit" type="submit" value="-"
+        .vote_score 0
+        form.button_to action= "/answers/#{@answer.id}/vote_up" data-remote="true" method="post" id='vote-up-btn'
+          input name="commit" type="submit" value="+"
+        form.button_to action= "/answers/#{@answer.id}/vote_reset" data-remote="true" method="post" id='vote-reset-btn' class='btn_hide'
+          input name="commit" type="submit" value="reset"
+      - else
+        .vote_score 0
+    .comment
+      - if gon.is_user_signed_in
+        .comment_form
+           p
+            form.new_comment id='new_comment' accept-charset="UTF-8" method="post" action= "/answers/#{@answer.id}/comment" data-remote="true"
+              input name="utf8" type="hidden" value="✓"
+              input name="_method" type="hidden" value="post"
+              .form-group
+                label for="comment_body"
+                textarea#comment_body.form-control name="comment[body]"
+              input name="commit" type="submit" value="Add comment"
+  - if gon.is_user_signed_in && gon.question_owner
+    form.button_to action= "/answers/#{@answer.id}/best_answer" data-remote="true" method="post" id='best_answer'
+          input name="commit" type="submit" value="Best answer"
+       
+      
+
+    
