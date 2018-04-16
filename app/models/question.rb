@@ -3,8 +3,8 @@ class Question < ApplicationRecord
   include Commented
 
   has_many :answers, dependent: :destroy
-  has_many :attachments, as: :attachable, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+  has_many :attachments, as: :attachable, dependent: :destroy
   belongs_to :user
 
   validates :title, presence: true, length: { minimum: 10 }
@@ -14,15 +14,21 @@ class Question < ApplicationRecord
 
   after_create :subscribe_owner
 
-  def subscribe_owner
-    Subscription.create!(user: user, question: self)
+  def add_subscribe(user)
+    subscriptions.create!(user: user)
   end
 
-  def add_subscribe(user)
-    subscriptions.create!(user: user, question: self)
+  def del_subscribe(user)
+    subscriptions.where(user: user).destroy_all
   end
 
   def subscribed?(user)
     subscriptions.exists?(user: user)
+  end
+
+  private
+
+  def subscribe_owner
+    Subscription.create!(user: user, question: self)
   end
 end

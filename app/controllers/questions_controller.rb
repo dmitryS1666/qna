@@ -3,11 +3,11 @@ class QuestionsController < ApplicationController
   include Comentabled
 
   before_action :authenticate_user!, only: %i[new create update]
-  before_action :load_question, only: %i[show destroy update subscribe]
+  before_action :load_question, only: %i[show destroy update subscribe unsubscribe]
   after_action :publish_question, only: %i[create]
 
   respond_to :html, :json
-  respond_to :js, only: %i[subscribe]
+  respond_to :js, only: %i[subscribe unsubscribe]
 
   authorize_resource
 
@@ -40,6 +40,10 @@ class QuestionsController < ApplicationController
 
   def subscribe
     respond_with(@question.add_subscribe(current_user), template: 'common/subscribe')
+  end
+
+  def unsubscribe
+    respond_with(@question.del_subscribe(current_user), template: 'common/subscribe')
   end
 
   private

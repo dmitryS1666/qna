@@ -30,6 +30,10 @@ class Ability
       !question.subscribed?(user)
     end
 
+    can :unsubscribe, Question do |question|
+      question.subscribed?(user)
+    end
+
     alias_action :update, :destroy, to: :subject_pull
     can :subject_pull, [Question, Answer] do |type|
       user.owner_of?(type)

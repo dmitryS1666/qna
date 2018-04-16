@@ -15,11 +15,23 @@ feature 'Subscriptions', %q{
     expect(page).to_not have_button 'Subscribe'
   end
 
-  scenario 'Author dont see subsribe link in his question' do
-    sign_in(author)
-    visit question_path(question)
+  describe 'Non-author of question user' do
+    before do
+      sign_in(author)
+      visit question_path(question)
+    end
 
-    expect(page).to_not have_button 'Subscribe'
+    scenario 'Author dont see subsribe link in his question' do
+      expect(page).to_not have_button 'Subscribe'
+      expect(page).to have_button "Unsubscribe"
+    end
+
+    scenario 'Author can unsubsribe from his question', js: true do
+      click_on 'Unsubscribe'
+
+      expect(page).to have_button 'Subscribe'
+      expect(page).to_not have_button "Unsubscribe"
+    end
   end
 
   describe 'Non-author of question user' do
@@ -35,7 +47,16 @@ feature 'Subscriptions', %q{
     scenario 'can subsribe to foreign question', js: true do
       click_on 'Subscribe'
 
-      expect(page).to have_content "Succes subscription for a new answers!"
+      expect(page).to_not have_button 'Subscribe'
+      expect(page).to have_button "Unsubscribe"
+    end
+
+    scenario 'can unsubsribe to foreign question', js: true do
+      click_on 'Subscribe'
+      click_on 'Unsubscribe'
+
+      expect(page).to have_button 'Subscribe'
+      expect(page).to_not have_button "Unsubscribe"
     end
   end
 end
