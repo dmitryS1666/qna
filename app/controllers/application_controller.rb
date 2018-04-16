@@ -1,7 +1,16 @@
 class ApplicationController < ActionController::Base
+  include Serialized
+
   protect_from_forgery with: :exception
 
-  before_action :gon_user
+  before_action :authenticate_user!, unless: :devise_controller?
+  before_action :gon_user, unless: :devise_controller?
+
+  load_and_authorize_resource
+
+  def gon_user
+    gon.user_id = current_user.id if current_user
+  end
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|

@@ -1,8 +1,7 @@
-<% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('#errors').html('<%= j render 'common/errors', resource: @answer %>');
-  <% end %>
+<% if @answer.valid? %>
+  $("div#<%= dom_id @answer %>").html(
+      '<%= j render partial: @answer, locals: { answer: @answer } %>'
+  );
 <% else %>
-  $('#errors') .empty()
-  $('#answer-id-<%= @answer.id %>').html('<%= j render @answer %>');
+  $('<%= j render 'answers/validation_errors' %>').insertBefore($('.edit-answer-form form'));
 <% end %>

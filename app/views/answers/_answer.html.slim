@@ -1,18 +1,37 @@
-.answer
-  div id="answer-id-#{answer.id}" class=('best_answer' if answer.best?)
-    p= answer.body
-    =render 'common/file_list', resource: answer
-    =render 'common/rating', resource: answer
-    =render 'common/comments', resource: answer, url: comment_answer_path(answer)
-    - if can?(:update, answer)
-      p= link_to 'Delete Answer', answer_path(answer), remote: true, method: :delete, data: { confirm: "You sure?" }
-      p= link_to 'Edit', '', class: 'edit-answer-button', id: 'edit-answer-button', data: { 'edit-id': answer.id }
-      =form_for answer, remote: true do |form|
-        = form.label :body, 'Update answer:'
-        = form.text_area :body
-        .files
-          = render 'common/edit_file_field', form: form
-        = form.submit 'Save'
+- if answer.persisted?
+  .answer.collection-item.section id=dom_id(answer)
+    .answer-info
+      - if answer.best?
+        span.badge.green.white-text.answer-best-badge best
+      p.answer-body = answer.body
+      br
 
-    - if can?(:best_answer, answer)
-      p= button_to 'Best answer', best_answer_answer_path(answer), remote: true
+      h5 Rating:
+      p.rating
+        = answer.rating
+
+      - if can?(:vote_pull, resource)
+        = render 'shared/vote', resource: answer
+
+        .errors
+        br
+
+    .answer-controls
+      .row
+        -if answer.attachments.any?
+          .col
+            p Attachments:
+            = render 'attachments/attachment', resource: answer
+            br
+
+        - if can?(:update, answer)
+          .col
+            = render 'answers/form_edit', answer: answer
+            br
+            = link_to 'Delete answer', answer, method: :delete, remote: true
+            br
+
+        - if can?(:best_answer, answer)
+          .col
+            = link_to 'Mark as best', make_best_answer_path(answer), method: :patch, remote: true
+            br

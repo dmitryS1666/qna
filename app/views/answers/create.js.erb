@@ -1,9 +1,7 @@
-<% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('#errors').html('<%= j render 'common/errors', resource: @answer %>');
-  <% end %>
+<% if @answer.valid? %>
+  $('div.answers div.answers-list').append('<%= j render partial: @answer, locals: { answer: @answer } %>');
+  $('form#new_answer p textarea').val('');
+  $('form#new_answer div input[type="file"]').val('');
 <% else %>
-  $('#errors') .empty()
-  $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('<%= j render 'answers/validation_errors' %>').insertBefore($('#new-answer-form form'));
 <% end %>
