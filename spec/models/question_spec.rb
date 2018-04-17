@@ -36,13 +36,18 @@ RSpec.describe Question, type: :model do
 
   describe '#add_subscribe' do
     it 'create a new subscribe for question' do
-      expect(question.subscriptions).to include(question.add_subscribe(other_user))
+      expect(question.subscriptions).to_not include(other_user)
+      question.add_subscribe(other_user)
+      expect(question.subscriptions.first.user_id).to eq question.user.id
     end
   end
 
   describe '#del_subscribe' do
     it 'del subscribe for question' do
-      expect(question.subscriptions).to_not include(question.del_subscribe(user))
+      question.add_subscribe(other_user)
+      expect(question.subscriptions.first.user_id).to eq question.user.id
+      question.del_subscribe(other_user)
+      expect(question.subscriptions.first.user_id).to_not eq question.user.id
     end
   end
 
