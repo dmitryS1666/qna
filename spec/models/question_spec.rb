@@ -9,6 +9,7 @@ RSpec.describe Question, type: :model do
   it { should have_many(:ratings)}
   it { should have_many(:comments)}
   it { should have_many(:subscriptions)}
+  it { should have_many(:subscribers)}
 
   it { should accept_nested_attributes_for :attachments}
 

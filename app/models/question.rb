@@ -4,6 +4,7 @@ class Question < ApplicationRecord
 
   has_many :answers, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+  has_many :subscribers, through: :subscriptions, foreign_key: "user_id"
   has_many :attachments, as: :attachable, dependent: :destroy
   belongs_to :user
 
@@ -14,21 +15,23 @@ class Question < ApplicationRecord
 
   after_create :subscribe_owner
 
+  scope :last_day, -> { where(created_at: 24.hours.ago..Time.now) }
+
   def add_subscribe(user)
-    subscriptions.create!(user: user)
+    subscriptions.create!(subscriber: user)
   end
 
   def del_subscribe(user)
-    subscriptions.where(user: user).destroy_all
+    subscriptions.where(subscriber: user).destroy_all
   end
 
   def subscribed?(user)
-    subscriptions.exists?(user: user)
+    subscriptions.exists?(subscriber: user)
   end
 
   private
 
   def subscribe_owner
-    Subscription.create!(user: user, question: self)
+    subscriptions.create!(subscriber: user, question: self)
   end
 end

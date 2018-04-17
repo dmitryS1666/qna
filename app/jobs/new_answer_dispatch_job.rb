@@ -2,8 +2,9 @@ class NewAnswerDispatchJob < ApplicationJob
   queue_as :mailers
 
   def perform(answer)
-    answer.question.subscriptions.all.each do |subscription|
-      AnswerMailer.notifier(answer, subscription.user).deliver_later if answer.user != subscription.user
+    subscribers = answer.question.subscribers
+    subscribers.find_each do |recipient|
+      AnswerMailer.notifier(answer, recipient).try(:deliver_later) unless answer.user == recipient
     end
   end
 end
