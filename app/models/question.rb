@@ -4,7 +4,7 @@ class Question < ApplicationRecord
 
   has_many :answers, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :subscribers, through: :subscriptions, foreign_key: "user_id"
+  has_many :subscribers, through: :subscriptions, source: :user
   has_many :attachments, as: :attachable, dependent: :destroy
   belongs_to :user
 
