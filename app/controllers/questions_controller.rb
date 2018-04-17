@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   include Voting
   include Comentabled
+  include Subscribled
 
   before_action :authenticate_user!, only: %i[new create update]
   before_action :load_question, only: %i[show destroy update subscribe unsubscribe]
@@ -36,14 +37,6 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with(@question.destroy) if current_user.owner_of?(@question)
-  end
-
-  def subscribe
-    respond_with(@question.add_subscribe(current_user), template: 'common/subscribe')
-  end
-
-  def unsubscribe
-    respond_with(@question.del_subscribe(current_user), template: 'common/subscribe')
   end
 
   private
