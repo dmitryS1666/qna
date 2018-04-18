@@ -1,0 +1,7 @@
+.results
+  - if @results.present?
+    h3 Search results #{@query}
+    - @results.each do |result|
+      render result
+  - else
+    No results
