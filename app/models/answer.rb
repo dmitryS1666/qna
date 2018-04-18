@@ -7,6 +7,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true, length: { minimum: 2 }
 
+  after_create :dispatch_new_answer, on: :create
+
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   scope :sort_by_best, -> { order(best: :desc) }
@@ -18,5 +20,9 @@ class Answer < ApplicationRecord
       question.answers.update_all(best: false)
       update!(best: true)
     end
+  end
+
+  def dispatch_new_answer
+    NewAnswerDispatchJob.perform_later(self)
   end
 end

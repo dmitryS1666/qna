@@ -7,6 +7,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:questions)}
   it { should have_many(:ratings)}
   it { should have_many(:authorizations)}
+  it { should have_many(:subscriptions)}
 
   describe 'method owner_of?' do
     let(:user) { create(:user) }

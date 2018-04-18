@@ -25,7 +25,7 @@ shared_examples_for "model_rated" do
 
   describe '#vote_down' do
     it 'add a new negative rating' do
-      expect(assosiation.ratings).to include(assosiation.vote_up(user))
+      expect(assosiation.ratings).to include(assosiation.vote_down(user))
     end
 
     it 'check assosiation new negative rating with user' do

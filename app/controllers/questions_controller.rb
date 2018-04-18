@@ -1,12 +1,14 @@
 class QuestionsController < ApplicationController
   include Voting
   include Comentabled
+  include Subscribled
 
   before_action :authenticate_user!, only: %i[new create update]
-  before_action :load_question, only: %i[show destroy update]
+  before_action :load_question, only: %i[show destroy update subscribe unsubscribe]
   after_action :publish_question, only: %i[create]
 
   respond_to :html, :json
+  respond_to :js, only: %i[subscribe unsubscribe]
 
   authorize_resource
 

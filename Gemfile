@@ -38,6 +38,10 @@ gem 'oj_mimic_json'
 gem 'skim'
 gem 'sprockets'
 gem 'gon'
+# фоновые задачи
+gem 'sidekiq'
+gem 'sinatra', '>= 1.3.0', require: nil
+gem 'whenever'
 
 
 group :development, :test do
