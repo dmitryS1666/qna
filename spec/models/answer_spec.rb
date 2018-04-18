@@ -1,48 +1,42 @@
 require 'rails_helper'
 
-describe Answer do
-  it_behaves_like 'votable'
-
-  describe 'association' do
-    it { should belong_to :question }
-    it { should belong_to :user }
-    it { should have_many(:attachments).dependent :destroy }
-    it { should have_many(:votes).dependent :destroy }
+RSpec.describe Answer, type: :model do
+  it { should validate_presence_of :body}
+  it do
+    should validate_length_of(:body).
+        is_at_least(2).
+        on(:create)
   end
+  it { should belong_to(:question) }
+  it { should belong_to(:user) }
+  it { should have_many(:attachments)}
+  it { should have_many(:ratings)}
+  it { should have_many(:comments)}
 
-  context 'validation' do
-    it { should validate_presence_of :body }
-  end
+  it { should accept_nested_attributes_for :attachments}
 
-  describe 'attributes' do
-    it { should accept_nested_attributes_for :attachments }
-  end
+  describe 'method flag_as_best' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, user: user, question: question) }
+    let(:second_answer) { create(:answer, user: user, question: question) }
 
-  describe 'best answer' do
-    let!(:question) { create(:question) }
-    let!(:answer) { create(:answer, question: question) }
-    let!(:another_answer) { create(:answer, question: question) }
-    let!(:answers) { create_list(:answer, 3, question: question) }
-
-    it 'makes answer best' do
-      answer.make_best!
+    it 'to flag answer best' do
+      answer.flag_as_best
       answer.reload
-      expect(answer).to be_best
+
+      expect(answer.best).to be true
+      expect(question.answers.where(best: true).count).to eq(1)
     end
 
-    it 'sets only one best answer' do
-      answers.each do |answer|
-        answer.make_best!
-        answer.reload
-        expect(question.answers.where(best: true).count).to eq 1
-      end
-    end
+    it 'the question can have only one best answer' do
+      second_answer.flag_as_best
+      second_answer.reload
 
-    it 'sets best answer at top' do
-      last_answer = answers.last
-      last_answer.make_best!
-      expect(Answer.all.first).to eq last_answer
+      expect(question.answers.where(best: true).count).to eq(1)
     end
   end
 
+  let!(:object_name) { :answer }
+  it_behaves_like "model_rated"
 end

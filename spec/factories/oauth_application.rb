@@ -6,4 +6,3 @@ FactoryBot.define do
     secret '87654321'
   end
 end
-

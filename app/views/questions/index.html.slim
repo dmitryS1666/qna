@@ -1,31 +1,13 @@
-/table.question_list
-/  tr
-/    th List of questions
-/  - if @questions.present?
-/    - @questions.each do |question|
-/      tr
-/        td= link_to question.title, question
-/  - else
-/    tr
-/      td 'No questions :('
-/tr
-/  td
-/    /p= link_to 'Ask question', new_question_path if can?(:create, Question)
-/    p= link_to 'Ask question', new_question_path
-
-
-
-h3 Questions
-.questions-list.collection
-  - if @questions.any?
-    = render @questions
+table.question_list
+  tr
+    th List of questions
+  - if @questions.present?
+    - @questions.each do |question|
+      tr
+        td= link_to question.title, question
   - else
-    div
-      .col.s6.offset-s3.center No questions found(
-
-- if can?(:create, Question)
-  = render 'shared/add_btn', id: "add_question_btn"
-  = render 'form'
-
-  = content_for :scripts
-  = javascript_include_tag 'questions'
+    tr
+      td 'No questions'
+tr
+  td
+    p= link_to 'Ask question', new_question_path if can?(:create, Question)

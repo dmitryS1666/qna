@@ -1,26 +1,24 @@
 class QuestionsController < ApplicationController
-  include Voted
+  include Voting
   include Comentabled
+  include Subscribled
 
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :destroy, :update]
-  after_action :publish_question, only: [:create]
-  before_action :build_answer, only: :show
+  before_action :authenticate_user!, only: %i[new create update]
+  before_action :load_question, only: %i[show destroy update subscribe unsubscribe]
+  after_action :publish_question, only: %i[create]
 
   respond_to :html, :json
-  authorize_resource
+  respond_to :js, only: %i[subscribe unsubscribe]
 
-  def index
-    respond_with(@questions = Question.all)
-  end
+  authorize_resource
 
   def new
     @question = Question.new
     respond_with(@question.attachments.build)
   end
 
-  def show
-    respond_with @question
+  def index
+    respond_with(@questions = Question.all)
   end
 
   def create
@@ -28,8 +26,13 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
-    respond_with @question
+    @question.update(question_params) if current_user.owner_of?(@question)
+  end
+
+  def show
+    @answer = @question.answers.build
+    @answer.attachments.build
+    gon.question_owner = @question.user_id == (current_user && current_user.id)
   end
 
   def destroy
@@ -38,27 +41,22 @@ class QuestionsController < ApplicationController
 
   private
 
-  def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
-  end
-
-  def build_answer
-    @answer = @question.answers.build
-  end
-
   def publish_question
     return if @question.errors.any?
     ActionCable.server.broadcast(
         'questions',
         ApplicationController.render(
-            partial: 'questions/question',
-            locals: { question: @question }
+            partial: 'common/list',
+            locals: {question: @question}
         )
     )
   end
 
-  def find_question
+  def load_question
     @question = Question.find(params[:id])
   end
 
+  def question_params
+    params.require(:question).permit(:title, :body, attachments_attributes: %i[file id _destroy])
+  end
 end
