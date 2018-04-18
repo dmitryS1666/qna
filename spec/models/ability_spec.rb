@@ -36,10 +36,14 @@ RSpec.describe Ability, type: :model do
       it { should be_able_to :destroy, question, user: user }
       it { should_not be_able_to :destroy, foreign_question, user: user }
       it { should be_able_to :comment, Question }
-      it { should_not be_able_to :create_vote, question, user: user }
-      it { should_not be_able_to :delete_vote, question, user: user }
-      it { should be_able_to :create_vote, foreign_question, user: user }
-      it { should be_able_to :delete_vote, foreign_question, user: user }
+      it { should be_able_to :vote_up, foreign_question, user: user }
+      it { should be_able_to :vote_down, foreign_question, user: user }
+      it { should be_able_to :vote_reset, foreign_question, user: user }
+      it { should_not be_able_to :vote_up, question, user: user }
+      it { should_not be_able_to :vote_down, question, user: user }
+      it { should_not be_able_to :vote_reset, question, user: user }
+      it { should be_able_to :subscribe, Question }
+      it { should be_able_to :unsubscribe, Question }
     end
     context 'Answer' do
       it { should be_able_to :update, answer, user: user }
@@ -47,16 +51,14 @@ RSpec.describe Ability, type: :model do
       it { should be_able_to :destroy, answer, user: user }
       it { should_not be_able_to :destroy, other_answer , user: user }
       it { should be_able_to :comment, Answer }
-      it { should_not be_able_to :create_vote, answer, user: user }
-      it { should_not be_able_to :delete_vote, answer, user: user }
-      it { should be_able_to :create_vote, other_answer, user: user }
-      it { should be_able_to :delete_vote, other_answer, user: user }
+      it { should be_able_to :vote_up, other_answer, user: user }
+      it { should be_able_to :vote_down, other_answer, user: user }
+      it { should be_able_to :vote_reset, other_answer, user: user }
+      it { should_not be_able_to :vote_up, answer, user: user }
+      it { should_not be_able_to :vote_down, answer, user: user }
+      it { should_not be_able_to :vote_reset, answer, user: user }
       it { should be_able_to :best_answer, other_answer, user: user }
       it { should_not be_able_to :best_answer, create(:answer, user: other, question: foreign_question), user: user }
-    end
-    context 'Vote' do
-      it { should be_able_to :cancel_vote, vote, user: user }
-      it { should_not be_able_to :cancel_vote, other_vote, user: user }
     end
   end
 

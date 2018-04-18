@@ -1,20 +1,11 @@
 require 'rails_helper'
 
-describe Comment do
-  it { should belong_to :user }
-  it { should belong_to :commentable }
-
-  it { should validate_presence_of :body }
-  it { should validate_presence_of :user_id }
-  it { should validate_presence_of :commentable_id }
-
-  context 'notifications' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
-
-    it 'notifies commentable author after create' do
-      expect { create(:comment, commentable: question) }
-          .to change { mailbox_for(user.email).size }
-    end
+RSpec.describe Comment, type: :model do
+  it { should belong_to(:commented) }
+  it { should belong_to(:user) }
+  it do
+    should validate_length_of(:body).
+        is_at_least(2).
+        on(:create)
   end
 end

@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  include Voted
+  include Voting
   include Comentabled
 
   before_action :authenticate_user!
@@ -18,37 +18,37 @@ class AnswersController < ApplicationController
   end
 
   def update
-    respond_with(@answer.update(answer_params)) if current_user.author?(@answer)
+    respond_with(@answer.update(answer_params)) if current_user.owner_of?(@answer)
   end
 
   def destroy
-    respond_with(@answer.destroy) if current_user.author?(@answer)
+    respond_with(@answer.destroy) if current_user.owner_of?(@answer)
   end
 
-  def make_best
-    @answer.make_best! if current_user.author?(@answer.question)
+  def best_answer
+    @answer = @question.answers.find(params[:id])
+    @answer.flag_as_best
   end
 
   private
 
-  def load_answer
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
-  end
-
   def publish_answer
     return if @answer.errors.any?
-    ActionCable.server.broadcast(
-        "questions/#{@answer.question_id}/answers", @answer
-    )
+    attachments = @answer.attachments.map do |a|
+      { id: a.id, url: a.file.url, name: a.file.identifier }
+    end
+    ActionCable.server.broadcast("answers_#{@question.id}", answer: @answer, attachments: attachments)
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
+    params.require(:answer).permit(:body, attachments_attributes: %i[file id _destroy])
   end
 
   def load_question
     @question = @answer.question
   end
-
 end
