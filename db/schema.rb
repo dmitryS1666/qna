@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411191310) do
+ActiveRecord::Schema.define(version: 20180416203750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,11 +48,11 @@ ActiveRecord::Schema.define(version: 20180411191310) do
   create_table "comments", force: :cascade do |t|
     t.text "body"
     t.bigint "user_id"
-    t.integer "commentable_id"
-    t.string "commentable_type"
+    t.integer "commented_id"
+    t.string "commented_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
+    t.index ["commented_id", "commented_type"], name: "index_comments_on_commented_id_and_commented_type"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -105,6 +105,31 @@ ActiveRecord::Schema.define(version: 20180411191310) do
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "value"
+    t.bigint "user_id"
+    t.integer "votable_id", null: false
+    t.string "votable_type", null: false
+    t.integer "vote", default: 0, null: false
+    t.string "appraised_type"
+    t.bigint "appraised_id"
+    t.index ["appraised_id", "appraised_type", "user_id"], name: "index_ratings_on_appraised_id_and_appraised_type_and_user_id"
+    t.index ["appraised_id", "appraised_type"], name: "index_ratings_on_appraised_id_and_appraised_type"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "question_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_subscriptions_on_question_id"
+    t.index ["user_id", "question_id"], name: "index_subscriptions_on_user_id_and_question_id", unique: true
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -118,24 +143,13 @@ ActiveRecord::Schema.define(version: 20180411191310) do
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
+    t.boolean "admin", default: false
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.boolean "admin", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "votes", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "value"
-    t.bigint "user_id"
-    t.integer "votable_id", null: false
-    t.string "votable_type", null: false
-    t.index ["user_id"], name: "index_votes_on_user_id"
-    t.index ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type"
   end
 
   add_foreign_key "answers", "users"
@@ -144,5 +158,7 @@ ActiveRecord::Schema.define(version: 20180411191310) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "questions", "users"
-  add_foreign_key "votes", "users"
+  add_foreign_key "ratings", "users"
+  add_foreign_key "subscriptions", "questions", on_delete: :cascade
+  add_foreign_key "subscriptions", "users", on_delete: :cascade
 end

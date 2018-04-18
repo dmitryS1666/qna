@@ -39,6 +39,8 @@ gem 'oj_mimic_json'
 gem 'skim'
 gem 'sprockets'
 gem 'gon'
+gem 'mysql2', '>= 0.3.18', :platform => :ruby
+gem 'thinking-sphinx', '~> 3.4.2'
 
 
 group :development, :test do

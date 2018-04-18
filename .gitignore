@@ -22,3 +22,7 @@
 
 config/database.yml
 .idea
+
+dump.rb
+config/*.sphinx.conf
+db/sphinx
