@@ -17,7 +17,6 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'rubocop', '~> 0.47.1', require: false
 gem 'slim-rails'
-gem 'rails-controller-testing'
 gem 'devise'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
