@@ -47,7 +47,7 @@ gem 'mysql2'
 gem 'thinking-sphinx', '~> 3.4.2'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
-
+gem 'therubyracer'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
