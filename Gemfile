@@ -44,7 +44,7 @@ gem 'sinatra', '>= 1.3.0', require: nil
 gem 'whenever'
 # gem 'mysql2', '>= 0.3.18', :platform => :ruby
 gem 'mysql2'
-gem 'thinking-sphinx', '~> 3.4.2'
+gem 'thinking-sphinx', '3.3.0'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
