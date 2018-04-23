@@ -9,8 +9,10 @@ html
   body
     .navbar-fixed
       =render 'shared/nav'
-    .search
+    .row.search
       =render 'shared/search'
+    /.flash
+      = render_flash
 
     .container.main
       = yield
@@ -19,4 +21,3 @@ html
       = Gon::Base.render_data
       = javascript_include_tag 'application'
       = yield :scripts
-      /= render_flash

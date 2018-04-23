@@ -1,5 +1,7 @@
-= form_tag search_path, method: :get do
-  /= select_tag :category, options_for_select(Search::CATEGORIES, params[:category]), prompt: 'Everywhere'
-  = text_field_tag :query, params[:query], required: true
-  = select_tag :category, options_for_select(Search::CATEGORIES)
-  = submit_tag 'Search'
+= form_tag search_path, method: :get, class: 'search' do
+  .col.s6.offset-s2
+    = text_field_tag :query, params[:query], required: true, placeholder: 'Search'
+  .col.s1
+    = select_tag :category, options_for_select(Search::CATEGORIES)
+  .col.s1
+    = submit_tag 'Search'
