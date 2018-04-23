@@ -7,8 +7,7 @@ require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
 require "capistrano/scm/git"
-require "capistrano-sidekiq"
-
+# require "capistrano-sidekiq"
 
 install_plugin Capistrano::SCM::Git
 
