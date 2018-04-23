@@ -102,7 +102,7 @@ Rails.application.configure do
   #     user_name: ENV['GMAIL_USERNAME'],
   #     password: ENV['GMAIL_PASSWORD'],
   #     enable_starttls_auto: true
-  }
+  # }
 
   config.action_mailer.default_url_options = { :host => '46.21.249.120' }
   config.action_mailer.raise_delivery_errors = true
