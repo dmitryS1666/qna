@@ -4,10 +4,10 @@ every 1.day, at: '20:00' do
   runner "DigestDispatchJob.create"
 end
 
-every 15.minutes do
-  rake "thinking_sphinx:index"
+every 60.minutes do
+  rake "ts:index"
 end
 
 every :reboot do
-  rake "thinking_sphinx:start"
+  rake "ts:start"
 end

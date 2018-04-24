@@ -62,12 +62,17 @@ GEM
     capistrano-bundler (1.3.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
     capistrano-rails (1.3.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (1.0.2)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
     capybara (2.18.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -384,8 +389,10 @@ DEPENDENCIES
   cancancan
   capistrano
   capistrano-bundler
+  capistrano-passenger
   capistrano-rails
   capistrano-rvm
+  capistrano-sidekiq
   capybara
   capybara-email
   capybara-webkit
@@ -418,6 +425,7 @@ DEPENDENCIES
   puma (~> 3.7)
   rails (~> 5.1.4)
   rails-controller-testing
+  redis
   remotipart
   responders (~> 2.0)
   rspec-rails

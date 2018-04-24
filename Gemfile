@@ -16,6 +16,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'rubocop', '~> 0.47.1', require: false
+gem 'redis'
 gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
@@ -76,9 +77,8 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
-  # gem 'capistrano-passenger', require: false
-  # gem 'capistrano-sidekiq', require: false
-  # gem 'capistrano3-unicorn', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-sidekiq', require: false
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

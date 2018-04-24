@@ -16,7 +16,7 @@ append :linked_files, ".env"
 # append :linked_files, "public/uploads"
 
 # Default value for linked_dirs is []
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "public/uploads"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
