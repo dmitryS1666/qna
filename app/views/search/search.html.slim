@@ -1,23 +1,21 @@
 .results
-  - Rails.logger.info ('@results.present?')
-  - Rails.logger.info (@results)
-  - if @results.present?
+  - if @result.present?
     h3 Search results #{@query}
     ul
-      - @results.each do |result|
+      - @result.each do |res|
         li
-          p= result.class.to_s
-          - case result.class.to_s
+          p= res.class.to_s
+          - case res.class.to_s
           - when "Question"
-              = link_to result.title, result
+              = link_to re.title, res
           - when "Answer"
-              = link_to result.body, result.question
+              = link_to res.body, res.question
           - when "Comment"
-              - if result.commented_type == 'Question'
-                = link_to result.body, question_path(result.commented_id)
+              - if res.commented_type == 'Question'
+                = link_to res.body, question_path(res.commented_id)
               - else
-                = link_to result.body, question_path(result.commented.question)
+                = link_to res.body, question_path(res.commented.question)
           - when "User"
-              = result.email
+              = res.email
   - else
     p No results
