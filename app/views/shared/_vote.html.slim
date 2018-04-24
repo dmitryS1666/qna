@@ -1,26 +1,37 @@
-/p.vote_up.vote
-/  = link_to 'Like', new_polymorphic_path(resource, plus: true), method: :post, remote: true
-/
-/p.vote_down.vote
-/  = link_to 'Dislike', new_polymorphic_path(resource), method: :post, remote: true
-/
 /- if can?(:cancel_vote, resource)
+/  p.vote_up.vote
+/    = link_to 'Like', new_polymorphic_path(resource, plus: true), method: :post, remote: true
+/
+/  p.vote_down.vote
+/    = link_to 'Dislike', new_polymorphic_path(resource), method: :post, remote: true
+/
 /  p.cancel_vote.vote
 /    = link_to 'Cancel your vote', polymorphic_path(resource), method: :delete, remote: true
 
 
-.votes.row class="#{ 'has-vote' if votable.voted_by?(current_user) }"
-  .col.chip.votes-sum =votable.votes_sum
-  - if can?(:cancel_vote, votable)
-    .col.vote-up-chip
-      = link_to polymorphic_path(votable, action: :vote_up), remote: true, method: :post, class: 'vote-link chip' do
-        | Like
-        i.material-icons.green-text.no-events thumb_up
-    .col.vote-down-chip
-      = link_to polymorphic_path(votable, action: :vote_down), remote: true, method: :post, class: 'vote-link chip' do
-        | Dislike
-        i.material-icons.red-text.no-events thumb_down
-    .col.vote-cancel-chip
-      = link_to polymorphic_path(votable, action: :cancel_vote), remote: true, method: :post, class: 'vote-link chip' do
-        | Cancel
-        i.material-icons.no-events close
+/.votes.row class="#{ 'has-vote' if votable.voted_by?(current_user) }"
+/  .col.chip.votes-sum =votable.votes_sum
+/  - if can?(:cancel_vote, votable)
+/    .col.vote-up-chip
+/      = link_to polymorphic_path(votable, action: :vote_up), remote: true, method: :post, class: 'vote-link chip' do
+/        | Like
+/        i.material-icons.green-text.no-events thumb_up
+/    .col.vote-down-chip
+/      = link_to polymorphic_path(votable, action: :vote_down), remote: true, method: :post, class: 'vote-link chip' do
+/        | Dislike
+/        i.material-icons.red-text.no-events thumb_down
+/    .col.vote-cancel-chip
+/      = link_to polymorphic_path(votable, action: :cancel_vote), remote: true, method: :post, class: 'vote-link chip' do
+/        | Cancel
+/        i.material-icons.no-events close
+
+.vote data-id="#{resource.id}"
+  - if can?(:vote_pull, resource)
+    = button_to '-', '', remote: true, id: 'vote-down-btn', class: "#{'btn_hide' if resource.voted?(current_user)}"
+    .vote_score
+      =resource.vote_score
+      = button_to '+', '', remote: true, id: 'vote-up-btn', class: "#{'btn_hide' if resource.voted?(current_user)}"
+      = button_to 'reset', '', id: 'vote-reset-btn', remote: true, class: "#{'btn_hide' unless resource.voted?(current_user)}"
+  - else
+    .vote_score
+      = resource.vote_score

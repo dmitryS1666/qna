@@ -1,7 +1,6 @@
 class Rating < ApplicationRecord
+  belongs_to :appraised, polymorphic: true
   belongs_to :user
-  belongs_to :votable, polymorphic: true
 
-  validates :user, presence: true
-  validates :value, inclusion: [-1, 1]
+  validates :vote, inclusion: [-1, 0, 1]
 end
