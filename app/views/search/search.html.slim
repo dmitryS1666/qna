@@ -7,7 +7,7 @@
           p= res.class.to_s
           - case res.class.to_s
           - when "Question"
-              = link_to re.title, res
+              = link_to res.title, res
           - when "Answer"
               = link_to res.body, res.question
           - when "Comment"
