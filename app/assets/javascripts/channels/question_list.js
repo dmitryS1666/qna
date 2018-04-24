@@ -1,5 +1,5 @@
 var ready = function () {
-   App.cable.subscriptions.create('QuestionChannel', {
+   App.cable.subscriptions.create('QuestionsChannel', {
     connected: function () {
       this.perform('follow');
     },

@@ -1,7 +1,7 @@
 var ready = function () {
   var $questionId = $('#question').data('id');
  
-  App.cable.subscriptions.create({channel: 'AnswerChannel', id: $questionId}, {
+  App.cable.subscriptions.create({channel: 'AnswersChannel', id: $questionId}, {
     connected: function () {
       this.perform('follow');
     },
