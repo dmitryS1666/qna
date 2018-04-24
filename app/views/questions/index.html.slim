@@ -8,5 +8,5 @@ h3 List of questions
     div
       .col.s6.offset-s3.center 'No questions'
 
-.fixed-action-btn style="bottom: 45px; right: 24px;"
-  = link_to 'Ask question', new_question_path if can?(:create, Question)
+.action-btn style="bottom: 45px; right: 24px;"
+  = link_to 'Add question', new_question_path if can?(:create, Question)
