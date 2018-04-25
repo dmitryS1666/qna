@@ -29,9 +29,14 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # execute :touch, realese_path.join('tmp/restart.txt')
       invoke 'unicorn:restart'
     end
+  end
+  task :stop do
+    invoke 'unicorn:stop'
+  end
+  task :start do
+    invoke 'unicorn:start'
   end
 
   after :publishing, :restart
