@@ -32,14 +32,14 @@ namespace :deploy do
       invoke 'unicorn:restart'
     end
   end
-  task :stop do
-    # invoke 'unicorn:stop'
-    run "if [ -f #{unicorn_pid} ] && [ -e /proc/$(cat #{unicorn_pid}) ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
-  end
-  task :start do
-    # invoke 'unicorn:start'
-    run "bundle exec unicorn_rails -c #{unicorn_conf} -E #{rails_env} -D"
-  end
+  # task :stop do
+  #   # invoke 'unicorn:stop'
+  #   run "if [ -f #{unicorn_pid} ] && [ -e /proc/$(cat #{unicorn_pid}) ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
+  # end
+  # task :start do
+  #   # invoke 'unicorn:start'
+  #   run "bundle exec unicorn_rails -c #{unicorn_conf} -E #{rails_env} -D"
+  # end
 
   after :publishing, :restart
 end
