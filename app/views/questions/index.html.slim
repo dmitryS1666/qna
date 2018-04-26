@@ -1,13 +1,13 @@
-/- cache collection_cache_key_for :question do
-h3 List of questions
-.questions-list.collection
-  - if @questions.present?
-    - @questions.each do |question|
-      .collection-item id=dom_id(question)
-        = link_to question.title, question
-  - else
-    div
-      .col.s6.offset-s3.center 'No questions'
+- cache collection_cache_key_for :question do
+  h3 List of questions
+  .questions-list.collection
+    - if @questions.present?
+      - @questions.each do |question|
+        .collection-item id=dom_id(question)
+          = link_to question.title, question
+    - else
+      div
+        .col.s6.offset-s3.center 'No questions'
 
-.action-btn style="bottom: 45px; right: 24px;"
-  = link_to 'Add ', new_question_path if can?(:create, Question)
+  .action-btn style="bottom: 45px; right: 24px;"
+    = link_to 'Add ', new_question_path if can?(:create, Question)
